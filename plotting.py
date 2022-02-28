@@ -55,3 +55,6 @@ def plotting_shape(distances,edges_xn,edges_yn,gradient_norm, X,Y, poly):
         polygons = [Polygon(poly, True)]
         poly_collection = PatchCollection(polygons, alpha=0.5, color="gray")
         ax.add_collection(poly_collection)
+        
+    plt.show()
+    return
