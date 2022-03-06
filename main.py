@@ -38,7 +38,9 @@ poly=poly[1:]
 #Grid from which we calculate the distance
 
 """
+----------------
 Binary Mask Blob
+----------------
 
 """
 """
@@ -58,7 +60,7 @@ segmentation = np.array([
 """
 segmentation = np.array([
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, -1, 1, 1, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 0],
     [0, 0, 1, 1, 0, 0, 0, 0],
     [0, 0, 1, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
