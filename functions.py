@@ -171,12 +171,14 @@ Info function:
 def final_distances(segmentation, grid_finess):
 
     
+    #creting a grid using the limits given by the segmentation in order to avoid useless calculations
     limit_grid = [segmentation.size/segmentation[0].size, segmentation[0].size]
-    
-
     X, Y = np.mgrid[-1:limit_grid[0]+1:grid_finess,-1:limit_grid[1]+1:grid_finess]
     XY = np.dstack([X, Y])
     points_to_sample = XY.reshape(-1, 2)
+    
+    
+    #getting a list of distance whose length will be the number of shapes
     
     distances = []
     
@@ -185,7 +187,9 @@ def final_distances(segmentation, grid_finess):
         distance= distance_from_poly(polygon, points_to_sample)
         distance = distance.reshape(*XY.shape[:-1])
         distances.append(distance)
-
+    
+    #finding the minimum distance between different points and the shapes ???
+    
     final_distance = np.ones_like(distances[0])*float("inf")
     for dist_matrix in distances:
         final_distance = np.minimum(final_distance, dist_matrix)
