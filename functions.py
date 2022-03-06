@@ -19,12 +19,13 @@ Transforming a binary blob mask into a shape
 """
 
 """
-Iterate_shapes function : find disconnected shapes in a black and white 
-image and it returns them one by one
+Info function:
+
+    find disconnected shapes in a black and white 
+    image and it returns them one by one
 
 """
 
-# quando trovo una serie di forme disconnesse in una immagine in bianco e nero, le ritorno una alla volta
 def iterate_shapes(image):
     labeled_array, num_features = label(image)
     for idx in range(1, num_features+1):
@@ -32,11 +33,13 @@ def iterate_shapes(image):
 
 
 """
-shape_as_points : given a binary mask blob it returns all the ponts contained
-within it, it returns basically the center of each pixel
+Info function: 
+    
+    given a binary mask blob it returns all the ponts contained
+    within it, it returns basically the center of each pixel
 
 """
-# data un blob nella maschera binaria, ritorna tutti i punti contenuti al suo interno (i centri dei pixel, in pratica)
+
 def shape_as_points(shape):
     shape = shape.astype(bool)
     X, Y = np.mgrid[:shape.shape[0], :shape.shape[1]]
@@ -46,12 +49,13 @@ def shape_as_points(shape):
     return points
 
 """
-gerenerate_side : from the centre of each pixel it return a square surrounding
-it, the for cornes with a unitary length side
+Info function:
+    
+    from the centre of each pixel given in the binary mask 
+    it returns a square whose centre is the given pixel
 
 """
 
-# dato il centro di un pixel, ritorno in sequenza i 4 angoli
 def generate_sides(poly, d=0.5):
     for x, y in poly:
         yield (x+d, y+d), (x+d, y-d)
@@ -60,12 +64,13 @@ def generate_sides(poly, d=0.5):
         yield (x-d, y+d), (x+d, y+d)
 
 """
-merge_cubes : as the name suggests, from the squares created in generate_sides,
-this function ill merge them in a single shape
+Info function:
+
+    from the squares created in generate_sides,
+    this function will merge all the cubes in a single shape
 
 """
 
-# data una serie di quandrati generati dai pixel, li unisco in un unico poligono
 def merge_cubes(shape):
     points = shape_as_points(shape)
     sides_duplicated = {s for s in generate_sides(points)}
@@ -93,7 +98,15 @@ Calculating the distances
 
 """
 
-
+"""
+ 
+Info function: 
+    
+    the functions is embedded in the one for calculating the distances
+    from the poly, it returns all the differences as vector between the each point
+    of the grid and each vertex
+ 
+""" 
 def diff_point_array(A, B):
         assert A.shape[-1] == B.shape[-1]
         A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
@@ -103,8 +116,17 @@ def diff_point_array(A, B):
         return C
 
 
+"""
+ 
+Info function: 
+    
+    a polygon is given as input which is described as a matrix of positions
+    in x and y, and a grid with a specific spacing. SDF s returned
+    
+""" 
 
-    # dato un poligono descritto come lista di punti ed una matrice di posizioni x, y, ne calcola la sdf
+
+# dato un poligono descritto come lista di punti ed una matrice di posizioni x, y, ne calcola la sdf
 def distance_from_poly(poly, points):
         
         p = np.ascontiguousarray(points)
@@ -133,12 +155,26 @@ def distance_from_poly(poly, points):
         sdf = s*d
         return sdf
     
+"""
+ 
+Info function: 
+    
+    in order to trasform a segmentation or a binary blob mask we need to 
+    iterate the process for each pixel and each disconnected shape found.
+    A grid is created considering the boundary of the binary mask. 
+    An array of final distances and a grid is returned in order to plot them
+
+""" 
+    
+    
+    
 def final_distances(segmentation, grid_finess):
 
+    
     limit_grid = [segmentation.size/segmentation[0].size, segmentation[0].size]
     
 
-    X, Y = np.mgrid[-1:limit_grid[0]+1:grid_finess, -1:limit_grid[1]+1:grid_finess]
+    X, Y = np.mgrid[-1:limit_grid[0]+1:grid_finess,-1:limit_grid[1]+1:grid_finess]
     XY = np.dstack([X, Y])
     points_to_sample = XY.reshape(-1, 2)
     
