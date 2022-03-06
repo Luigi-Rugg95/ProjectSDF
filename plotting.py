@@ -32,29 +32,12 @@ mycmap = LinearSegmentedColormap.from_list(
 )
 
 
-
-def plotting_shape(distances,edges_xn,edges_yn,gradient_norm, X,Y, poly): 
-    norm_d = mcolors.TwoSlopeNorm(vmin=distances.min(), vcenter=0, vmax=distances.max())
-    norm_gx = mcolors.TwoSlopeNorm(vmin=edges_xn.min(), vcenter=0, vmax=edges_xn.max())
-    norm_gy = mcolors.TwoSlopeNorm(vmin=edges_yn.min(), vcenter=0, vmax=edges_yn.max())
+def plotting(final_distance, X, Y):
     props = dict(aspect="equal", origin="lower", extent=(X.min(), X.max(), Y.min(), Y.max()))
-
-    gy = r"$\nabla {SDF}_y$"
-    gx = r"$\nabla {SDF}_x$"
-    gn = r"$|| \nabla SDF ||$"
-    fig, axes = plt.subplot_mosaic([["SDF", gn], [gy, gx]], figsize=(16, 12))
-    for name, ax in axes.items():
-        ax.set_title(name, fontsize=20, fontfamily="serif", y=1.025)
-    
-    axes["SDF"].imshow(distances.T, norm=norm_d, cmap=mycmap, **props) #cos'è .T????
-    axes[gn].imshow(gradient_norm.T, **props)
-    axes[gy].imshow(edges_yn.T, norm=norm_gx, cmap='PiYG', **props)
-    axes[gx].imshow(edges_xn.T, norm=norm_gy, cmap='PiYG', **props)
-    
-    for ax in axes.values():
-        polygons = [Polygon(poly, True)]
-        poly_collection = PatchCollection(polygons, alpha=0.5, color="gray")
-        ax.add_collection(poly_collection)
-        
-    plt.show()
+    fig, ax = plt.subplots(figsize=(np.minimum(np.max(X),20), np.minimum(np.max(Y),20)), dpi=300)
+    norm_d = mcolors.TwoSlopeNorm(vmin=final_distance.min(), vcenter=0, vmax=final_distance.max())
+    ax.imshow(final_distance.T, norm=norm_d, cmap=mycmap, **props)
+    fig.savefig('shape.png')
+    #plt.close('all')
     return
+
