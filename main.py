@@ -10,7 +10,7 @@ import numpy as np
 
 #importing functions
 from plotting import plotting
-from functions import final_distances
+from functions import functions
 
 #Defining a Shape
 """
@@ -69,5 +69,5 @@ segmentation = np.array([
     [0, 0, 0, 0, 0, 0, 0, 0],
 ])
 
-
-plotting(*final_distances(segmentation, 0.01))
+f = functions(segmentation, 0.01)
+plotting(*f.final_distances())
