@@ -69,5 +69,7 @@ segmentation = np.array([
     [0, 0, 0, 0, 0, 0, 0, 0],
 ])
 
-f = functions(segmentation, 0.01)
-plotting(*f.final_distances())
+type(segmentation)
+
+f = functions(segmentation, 0.1)
+plotting(f.sdf(),*f.grid())
