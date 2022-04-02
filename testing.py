@@ -84,9 +84,8 @@ def test_iterate_shapes():
     grid_finess=0.1
     
     test_sdf = sdf_mask(segmentation,grid_finess)
-    test_sdf.calculate_distances()
-    
-    assert len(test_sdf.distances) == 4
+    separeted_pol = [shape for shape in test_sdf.iterate_shapes(segmentation)]
+    assert len(separeted_pol) == 4
     
 
 def test_shape_as_points(): 
@@ -113,7 +112,15 @@ def test_shape_as_points():
     
     
     test_sdf = sdf_mask(segmentation,grid_finess)
-    assert np.max(test_sdf.shape_as_points(segmentation)[:,0])<segmentation[:,0].size
-    assert np.max(test_sdf.shape_as_points(segmentation)[:,1])<segmentation[0].size
+    
+    assert np.max(test_sdf.shape_as_points(segmentation)[:,0])<=segmentation[:,0].size
+    assert np.max(test_sdf.shape_as_points(segmentation)[:,1])<=segmentation[0].size
+    assert np.min(test_sdf.shape_as_points(segmentation)[:,0])>=0
+    assert np.min(test_sdf.shape_as_points(segmentation)[:,1])>=0
     
     
+def test_generate_sides(): 
+    
+    return
+
+
