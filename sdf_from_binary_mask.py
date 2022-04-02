@@ -11,20 +11,35 @@ from scipy.ndimage import label, generate_binary_structure
 
 
 
-class functions: 
+class sdf_from_binary_mask: 
     
     def __init__(self,segmentation,grid_finess):
+        """
         
+
+        Parameters
+        ----------
+        segmentation : numpy.ndarray
+            binary mask given as initial input for calculating the sdf
+        grid_finess : float
+            finess of the grid
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        assert grid_finess<=1, "Grid finess too low"
+        assert np.size(segmentation.shape)==2, "Wrong dimensions for the SDF" 
+        assert len(segmentation[segmentation!=0])!=0, "No segmentation found"
+    
+    
         self.segmentation = segmentation
-        self.grid_finess = grid_finess
-        self.limit_grid = [self.segmentation.size/self.segmentation[0].size, self.segmentation[0].size]
-        #creating a meshgrid
-        self.X, self.Y = np.mgrid[-1:self.limit_grid[0]+1:self.grid_finess,-1:self.limit_grid[1]+1:self.grid_finess]
-        self.XY = np.dstack([self.X, self.Y])
-        self.points_to_sample = self.XY.reshape(-1, 2)
+        self.grid_finess = abs(grid_finess)
         self.distances = []
         
-    
+       
     def grid(self): 
         """
     
@@ -32,11 +47,16 @@ class functions:
         -------
         X: numpy.ndarray
         Y: numpy.ndarray
-            both set in the __init__, fine grif used to calculate the distances
+            both set in the __init__, fine grid used to calculate the distances
         -------
         
         """
-        return self.X,self.Y
+        limit_grid = [self.segmentation[:,0].size, self.segmentation[0].size]
+        #creating a meshgrid
+        X, Y = np.mgrid[-1:limit_grid[0]+1:self.grid_finess,-1:limit_grid[1]+1:self.grid_finess]
+        
+        
+        return X,Y
         
     
     """
@@ -161,6 +181,7 @@ class functions:
         """
         
         points = self.shape_as_points(shape)
+        print(points[:,1])
         sides_duplicated = {s for s in self.generate_sides(points)}
         # the sides that are duplicated are inside the shape and needs to be removed
         sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
@@ -211,7 +232,6 @@ class functions:
             of the grid and each vertex
         
         """    
-        print(type(B))
         assert A.shape[-1] == B.shape[-1]
         A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
         B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
@@ -225,7 +245,6 @@ class functions:
     # dato un poligono descritto come lista di punti ed una matrice di posizioni x, y, ne calcola la sdf
     def distance_from_poly(self,poly,points):
         """
-        
 
         Parameters
         ----------
@@ -277,12 +296,24 @@ class functions:
         An array of final distances and a grid is returned in order to plot them
     
     """ 
+
+    def calculate_distances(self):         
+        
+        X,Y = self.grid()
+        
+        XY = np.dstack([X, Y])
+        points_to_sample = XY.reshape(-1, 2)
         
         
+        for shape in self.iterate_shapes(self.segmentation):
+            polygon = self.merge_cubes(shape)
+            self.distance= self.distance_from_poly(polygon, points_to_sample)
+            self.distance = self.distance.reshape(*XY.shape[:-1])
+            self.distances.append(self.distance)
+        return 
         
     def sdf(self):
-    
-        
+
         #creating a grid using the limits given by the segmentation in order to avoid useless calculations
         """
         limit_grid = [self.segmentation.size/self.segmentation[0].size, self.segmentation[0].size]
@@ -295,13 +326,7 @@ class functions:
         
         #getting a list of distance whose length will be the number of shapes
         
-        
-        
-        for shape in self.iterate_shapes(self.segmentation):
-            polygon = self.merge_cubes(shape)
-            self.distance= self.distance_from_poly(polygon, self.points_to_sample)
-            self.distance = self.distance.reshape(*self.XY.shape[:-1])
-            self.distances.append(self.distance)
+        self.calculate_distances()
         
         #finding the minimum distance between different points and the shapes ???
         final_distance = np.ones_like(self.distances[0])*float("inf")

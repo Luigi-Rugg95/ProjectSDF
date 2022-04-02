@@ -10,7 +10,7 @@ import numpy as np
 
 #importing functions
 from plotting import plotting
-from functions import functions
+from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
 
 #Defining a Shape
 """
@@ -66,10 +66,20 @@ segmentation = np.array([
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 1, 1, 0, 0, 0],
     [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
 ])
 
-type(segmentation)
+grid_finess = 0.1
 
-f = functions(segmentation, 0.1)
+limit_grid = [segmentation[:,0].size, segmentation[0].size]
+#creating a meshgrid
+X, Y = np.mgrid[-1:limit_grid[0]+1:grid_finess,-1:limit_grid[1]+1:grid_finess]
+XY = np.dstack([X, Y])
+points_to_sample = XY.reshape(-1, 2)
+
+#segmentation= np.array([[0],])            
+
+    
+f = sdf_mask(segmentation, 0.1)
+
+
 plotting(f.sdf(),*f.grid())
