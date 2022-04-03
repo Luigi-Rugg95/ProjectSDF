@@ -31,7 +31,7 @@ class sdf_from_binary_mask:
         """
         
         assert grid_finess<=1, "Grid finess too low"
-        assert np.size(segmentation.shape)==2, "Wrong dimensions for the SDF" 
+        assert np.size(segmentation.shape)<=2, "Wrong dimensions for the SDF" 
         assert len(segmentation[segmentation!=0])!=0, "No segmentation found"
     
     
@@ -106,7 +106,7 @@ class sdf_from_binary_mask:
 
         Parameters
         ----------
-        shape : numpy.ndarray
+        shape : numpy.ndarray type bool or int of 0,1
             shape returned by iterate_shapes() function generator for
             the input segmentation
 
@@ -135,7 +135,7 @@ class sdf_from_binary_mask:
 
         Parameters
         ----------
-        poly : numpay.ndarray
+        poly : numpay.ndarray 
             coordinates of each pixel of the binary mask
         d : float
             The default is 0.5, wich means that it defines a side length of 
@@ -182,7 +182,6 @@ class sdf_from_binary_mask:
         
         points = self.shape_as_points(shape)
         sides_duplicated = {s for s in self.generate_sides(points)}
-        print(sides_duplicated)
         # the sides that are duplicated are inside the shape and needs to be removed
         sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
         # terrible algorithm to re-thread the sides in a polygon
@@ -255,7 +254,7 @@ class sdf_from_binary_mask:
 
         Returns
         -------
-        sdf : numpy.ndarray
+        sdf : numpy.float64
             calculated sdf
 
         """
@@ -285,20 +284,18 @@ class sdf_from_binary_mask:
         sdf = s*d
         return sdf
     
-    """
-    To Do.... 
     
-    Info function: 
-        
-        in order to trasform a segmentation or a binary blob mask we need to 
-        iterate the process for each pixel and each disconnected shape found.
-        A grid is created considering the boundary of the binary mask. 
-        An array of final distances and a grid is returned in order to plot them
-    
-    """ 
-
     def calculate_distances(self):         
+        """
+    
+        Returns
+        -------
+        Appends the calculated distance to the init self.distances list
         
+        Description
+        -----------
+        
+        """
         X,Y = self.grid()
         
         XY = np.dstack([X, Y])
@@ -313,19 +310,18 @@ class sdf_from_binary_mask:
         return 
         
     def sdf(self):
-
-        #creating a grid using the limits given by the segmentation in order to avoid useless calculations
         """
-        limit_grid = [self.segmentation.size/self.segmentation[0].size, self.segmentation[0].size]
-        
-        #creating a meshgrid
-        X, Y = np.mgrid[-1:limit_grid[0]+1:self.grid_finess,-1:limit_grid[1]+1:self.grid_finess]
-        XY = np.dstack([X, Y])
-        points_to_sample = XY.reshape(-1, 2)
+    
+        Returns
+        -------
+        final_distance : numpy.float64
+            SDF to be plotted
+
+        Description
+        -----------
         """
         
         #getting a list of distance whose length will be the number of shapes
-        
         self.calculate_distances()
         
         #finding the minimum distance between different points and the shapes ???
