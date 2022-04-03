@@ -31,7 +31,7 @@ class sdf_from_binary_mask:
         """
         
         assert grid_finess<=1, "Grid finess too low"
-        assert np.size(segmentation.shape)<=2, "Wrong dimensions for the SDF" 
+        assert np.size(segmentation.shape)==2, "Wrong dimensions for the SDF" 
         assert len(segmentation[segmentation!=0])!=0, "No segmentation found"
     
     
@@ -152,6 +152,7 @@ class sdf_from_binary_mask:
             it returns a square whose centre is the given pixel  
         
         """
+        print(poly.shape[1])
         for x, y in poly:
             yield (x+d, y+d), (x+d, y-d)
             yield (x+d, y-d), (x-d, y-d)

@@ -75,12 +75,12 @@ def test_init_segmentation():
     grid_finess= 0.1
     with pytest.raises(AssertionError):
             assert sdf_mask(segmentation,grid_finess)
-    """
+    
     segmentation=np.array([0,1,0])
     grid_finess= 0.1
     with pytest.raises(AssertionError):
             assert sdf_mask(segmentation,grid_finess)
-    """     
+    
     segmentation=np.array([[0],])
     with pytest.raises(AssertionError):
             assert sdf_mask(segmentation,grid_finess)
@@ -90,7 +90,7 @@ def test_init_segmentation():
 Really Need to check?
 """    
 
-@given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1))))
+@given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1))))
 def test_iterate_shapes(segmentation): 
     """
     Parameters 
@@ -111,18 +111,15 @@ def test_iterate_shapes(segmentation):
     if len(segmentation[segmentation!=0])==0:
         with pytest.raises(AssertionError):
             assert sdf_mask(segmentation,grid_finess)
-    
     else:
         num_shapes = label(segmentation)[1]
-        
         test_sdf = sdf_mask(segmentation,grid_finess)
-        
-        
         separeted_pol = [shape for shape in test_sdf.iterate_shapes(segmentation)]
         assert len(separeted_pol) == num_shapes
         
+@given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1))))
 
-def test_shape_as_points(): 
+def test_shape_as_points(segmentation): 
     """
     
 
@@ -132,50 +129,49 @@ def test_shape_as_points():
     coordinates returned in 2D
     """
     
-    segmentation = np.array([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],])
+    segmentation = np.array(segmentation)
     
     grid_finess=0.1
     
     #segmentation = np.array([[0],])
     
-    test_sdf = sdf_mask(segmentation,grid_finess)
+    if len(segmentation[segmentation!=0])==0:
+        with pytest.raises(AssertionError):
+            assert sdf_mask(segmentation,grid_finess)
     
     
-    assert np.max(test_sdf.shape_as_points(segmentation)[:,0])<=segmentation[:,0].size
-    assert np.max(test_sdf.shape_as_points(segmentation)[:,1])<=segmentation[0].size
-    assert np.min(test_sdf.shape_as_points(segmentation)[:,0])>=0
-    assert np.min(test_sdf.shape_as_points(segmentation)[:,1])>=0
-    assert test_sdf.shape_as_points(segmentation).shape[1]==2
-    assert(np.all(test_sdf.shape_as_points(segmentation) >= 0))
-    
-    
-def test_generate_sides(): 
-    
-    segmentation = np.array([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],])
-    
-    
-    points = np.array([
-    [1, 2],])
+    else: 
+        test_sdf = sdf_mask(segmentation,grid_finess)    
+        assert np.max(test_sdf.shape_as_points(segmentation)[:,0])<=segmentation[:,0].size
+        assert np.max(test_sdf.shape_as_points(segmentation)[:,1])<=segmentation[0].size
+        assert np.min(test_sdf.shape_as_points(segmentation)[:,0])>=0
+        assert np.min(test_sdf.shape_as_points(segmentation)[:,1])>=0
+        assert test_sdf.shape_as_points(segmentation).shape[1]==2
+        assert(np.all(test_sdf.shape_as_points(segmentation) >= 0))
 
-    grid_finess = 0.1
+
+@given(points = st.lists(st.tuples(st.integers(0,10),st.integers(0,10)),unique=True))
     
+def test_generate_sides(points): 
+    
+    segmentation = np.array([[0,1],])
+    grid_finess = 0.1
     test_sdf = sdf_mask(segmentation,grid_finess)
-    sides_duplicated = {s for s in test_sdf.generate_sides(points)}
-    assert len(sides_duplicated)==4 
+    
+    
+    points = np.array(points)
+    
+    
+    if np.size(points.shape) < 2:  #the previous tests assure already the right shape 
+        return
+    
+    elif points.shape[1]!=2: 
+        with pytest.raises(AssertionError):
+            assert sdf_mask(segmentation,grid_finess)
+    
+    else:
+        sides_duplicated = {s for s in test_sdf.generate_sides(points)}
+        assert len(sides_duplicated)==4*points.shape[0] 
     
     
     return

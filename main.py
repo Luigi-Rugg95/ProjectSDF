@@ -77,8 +77,7 @@ XY = np.dstack([X, Y])
 points_to_sample = XY.reshape(-1, 2)
 
 #segmentation= np.array([[0],])            
-
-    
-f = sdf_mask(segmentation, 0.0)
+segmentation = np.array([[0,1,0],])
+f = sdf_mask(segmentation, 0.1)
 
 plotting(f.sdf(),*f.grid())
