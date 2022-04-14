@@ -11,4 +11,9 @@ Question to ask:
     1. Generalizing the class for having also poligon as input?
     2. Checking also that segmentation is effectively a binary mask?
     
+To Do: 
+    
+    1. Writing better parameters and returns
+
 """
+

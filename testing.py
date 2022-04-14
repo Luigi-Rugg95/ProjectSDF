@@ -19,57 +19,59 @@ from datetime import timedelta
 import pytest
 
 
-@given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1))),grid_finess=st.floats(0.1,2))
-def test_sdf_init_grid(segmentation, grid_finess): 
+def test_sdf_init_grid_finess(): 
     """
-    
-
-    Parameters
-    ----------
-    segmentation : numpy.ndarray
-        binary mask given as initial input for calculating the sdf
-    grid_finess : float
-        finess of the grid
 
     Testing
     -------
-    correct dimension of the binary mask (2D)
-    finesse of the grid
-    correct limits of the grid
-    correct dimensions of the arrays
-    limiting case of no empty binary mask
-
+    Unit test on finesse of the grid limit values (0,1)
+    for having a good resolution    
+    
+    Using a square of unitary length as input
+    
     """
-    segmentation = np.array(segmentation)
-     
+    segmentation = np.array([[1],])
     
-    #at least grid finess smaller than the smallest pixel    
-    if grid_finess>1: 
-        with pytest.raises(AssertionError):
-            assert sdf_mask(segmentation,grid_finess)
-     
-    elif grid_finess==0: 
-        with pytest.raises(ZeroDivisionError):
-            assert sdf_mask(segmentation,grid_finess)
+    grid_finess=2
+    with pytest.raises(AssertionError):
+        assert sdf_mask(segmentation,grid_finess)
+        
     
     
-    elif len(segmentation[segmentation!=0])==0:
-        with pytest.raises(AssertionError):
-            assert sdf_mask(segmentation,grid_finess)
-     
+
+def test_grid():
+    """
     
-    else :  
-        test_sdf = sdf_mask(segmentation,grid_finess)
-        assert(np.max(test_sdf.grid()[0])>segmentation[:,0].size)
-        assert(np.max(test_sdf.grid()[1])>segmentation[0].size)
-        assert(np.min(test_sdf.grid()[0])<0)
-        assert(np.min(test_sdf.grid()[1])<0)
+
+    Testing
+    -------
+    testing the grid creating
+    limits of the grid contains the entire figure
+    grid finess finite value
+    
+    Using a square of unitary length as input
+    
+    """
+    segmentation = np.array([[1],])
+    grid_finess=0.1
+    
+    test_sdf = sdf_mask(segmentation,grid_finess)
+    assert(np.max(test_sdf.grid()[0])>=segmentation[:,0].size)
+    assert(np.max(test_sdf.grid()[1])>=segmentation[0].size)
+    assert(np.min(test_sdf.grid()[0])<0)
+    assert(np.min(test_sdf.grid()[1])<0)
+        
     
     
-    #extension of the grid, in order to cover the whole segmentation
-    
+    grid_finess=0   
+    test_sdf = sdf_mask(segmentation,grid_finess)
+    with pytest.raises(ZeroDivisionError):
+           assert test_sdf.grid()
+
     
 def test_init_segmentation(): 
+    
+    #these are all unit test
     
     segmentation=np.array([[[0,1,0],],])
     grid_finess= 0.1
@@ -84,11 +86,74 @@ def test_init_segmentation():
     segmentation=np.array([[0],])
     with pytest.raises(AssertionError):
             assert sdf_mask(segmentation,grid_finess)
+
+
+
+"""
+Unit testing using a unitary square centered in (0,0) as input labelled with 1
+"""
+
+@pytest.fixture
+def unitary_cube(): 
+    return [np.array([[1],]),0.1]
+    
+
+
+def test_iterate_shapes_1(unitary_cube): 
+    """
+    Parameters
+    ----------
+    segmentation = unitary cube[0] 
+    grid_finess = unitary cube[1]
+
+    Testing
+    -------
+    Output of the function generator
+    
+    """
+    
+    test_sdf = sdf_mask(*unitary_cube)
+    #using function utility used
+    
+    assert len(test_sdf.utility_iterate_shapes()) == 1     
+    assert test_sdf.utility_iterate_shapes()[0] == [[True]]     
+
+def test_shape_as_points_1(unitary_cube): 
+    """
+    Parameters
+    ----------
+    segmentation = unitary cube[0] 
+    grid_finess = unitary cube[1]
+
+    Testing
+    -------
+    testing length of the output
+    testing value of the output
+    
+    """
+    test_sdf = sdf_mask(*unitary_cube)
+    assert test_sdf.shape_as_points(unitary_cube[0]).shape[0] == 1
+    assert test_sdf.shape_as_points(unitary_cube[0]).shape[1] == 2
+    assert test_sdf.shape_as_points(unitary_cube[0]).all() == 0
+
+
+def test_generate_sides_1(unitary_cube): 
+    """
+    Parameters
+    ----------
+    segmentation = unitary cube[0] 
+    grid_finess = unitary cube[1]
+
+    Testing
+    -------
+    testing length of the output
+    testing value of the output
+    
+    """
+    test_sdf = sdf_mask(*unitary_cube)
+    assert len(test_sdf.utility_generate_sides()) == 4
     
      
-"""
-Really Need to check?
-"""    
 
 @given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1))))
 def test_iterate_shapes(segmentation): 

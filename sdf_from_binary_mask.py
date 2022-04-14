@@ -22,7 +22,7 @@ class sdf_from_binary_mask:
         segmentation : numpy.ndarray
             binary mask given as initial input for calculating the sdf
         grid_finess : float
-            finess of the grid
+            finess of the grid, value between (0,1)
 
         Returns
         -------
@@ -30,6 +30,7 @@ class sdf_from_binary_mask:
 
         """
         
+        #needs to be turned into if conditional
         assert grid_finess<=1, "Grid finess too low"
         assert np.size(segmentation.shape)==2, "Wrong dimensions for the SDF" 
         assert len(segmentation[segmentation!=0])!=0, "No segmentation found"
@@ -53,7 +54,7 @@ class sdf_from_binary_mask:
         """
         limit_grid = [self.segmentation[:,0].size, self.segmentation[0].size]
         #creating a meshgrid
-        X, Y = np.mgrid[-1:limit_grid[0]+1:self.grid_finess,-1:limit_grid[1]+1:self.grid_finess]
+        X, Y = np.mgrid[-1:limit_grid[0]+self.grid_finess:self.grid_finess,-1:limit_grid[1]+self.grid_finess:self.grid_finess]
         
         
         return X,Y
@@ -152,7 +153,7 @@ class sdf_from_binary_mask:
             it returns a square whose centre is the given pixel  
         
         """
-        print(poly.shape[1])
+        assert poly.shape[1]==2 #needed for 2D sdf
         for x, y in poly:
             yield (x+d, y+d), (x+d, y-d)
             yield (x+d, y-d), (x-d, y-d)
@@ -330,3 +331,19 @@ class sdf_from_binary_mask:
         for dist_matrix in self.distances:
             final_distance = np.minimum(final_distance, dist_matrix)
         return final_distance
+    
+    
+    """
+    ----------
+    Function utilities for testing function generator
+    ----------
+    """
+
+    def utility_iterate_shapes(self): 
+        separeted_pol = [shape for shape in self.iterate_shapes(self.segmentation)]
+        return separeted_pol
+        
+    def utility_generate_sides(self): 
+        sides = [((p1,p2)) for p1,p2 in self.generate_sides(self.shape_as_points(self.segmentation))]
+        return sides
+    

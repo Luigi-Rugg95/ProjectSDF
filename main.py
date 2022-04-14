@@ -68,16 +68,11 @@ segmentation = np.array([
     [0, 0, 1, 1, 1, 0, 0, 0],
 ])
 
-grid_finess = 0.1
 
-limit_grid = [segmentation[:,0].size, segmentation[0].size]
-#creating a meshgrid
-X, Y = np.mgrid[-1:limit_grid[0]+1:grid_finess,-1:limit_grid[1]+1:grid_finess]
-XY = np.dstack([X, Y])
-points_to_sample = XY.reshape(-1, 2)
+segmentation = np.array([[1],])
 
-#segmentation= np.array([[0],])            
-segmentation = np.array([[0,1,0],])
 f = sdf_mask(segmentation, 0.1)
-
+#print(f.grid()[0])
 plotting(f.sdf(),*f.grid())
+
+print(f.utility_iterate_shapes()[0])
