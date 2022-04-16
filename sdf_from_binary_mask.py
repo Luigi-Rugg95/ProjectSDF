@@ -48,7 +48,7 @@ class sdf_from_binary_mask:
         -------
         X: numpy.ndarray
         Y: numpy.ndarray
-            both set in the __init__, fine grid used to calculate the distances
+            fine grid used to calculate the distances
         -------
         
         """
@@ -74,7 +74,7 @@ class sdf_from_binary_mask:
 
         Parameters
         ----------
-        image : numpy.ndarray
+        image : numpy.ndarray 
             input binary blob mask given in the main
 
         Yield 
@@ -113,7 +113,7 @@ class sdf_from_binary_mask:
 
         Returns
         -------
-        points : numpy.ndarray
+        points : numpy.ndarray shape (2,:)
             coordinates of the center of each pixels
         
         Description
@@ -136,8 +136,8 @@ class sdf_from_binary_mask:
 
         Parameters
         ----------
-        poly : numpay.ndarray 
-            coordinates of each pixel of the binary mask
+        poly : numpay.ndarray shape (2,:)
+            coordinates of the center each pixel of the binary mask
         d : float
             The default is 0.5, wich means that it defines a side length of 
             one pixel
@@ -166,7 +166,7 @@ class sdf_from_binary_mask:
 
         Parameters
         ----------
-        shape : numpy.ndarray
+        shape : numpy.ndarray type bool 
             shape returned by iterate_shapes() function generator for
             the input segmentation
 
@@ -292,7 +292,7 @@ class sdf_from_binary_mask:
     
         Returns
         -------
-        Appends the calculated distance to the init self.distances list
+        Appends the calculated distances to the init self.distances list
         
         Description
         -----------
@@ -306,6 +306,7 @@ class sdf_from_binary_mask:
         
         for shape in self.iterate_shapes(self.segmentation):
             polygon = self.merge_cubes(shape)
+            #print(polygon)
             self.distance= self.distance_from_poly(polygon, points_to_sample)
             self.distance = self.distance.reshape(*XY.shape[:-1])
             self.distances.append(self.distance)
@@ -347,3 +348,22 @@ class sdf_from_binary_mask:
         sides = [((p1,p2)) for p1,p2 in self.generate_sides(self.shape_as_points(self.segmentation))]
         return sides
     
+    def utility_distance_from_poly_1(self):
+        x = np.linspace(-1,1,int((2/self.grid_finess+1)))
+        points_inside = x[abs(x)<0.5]
+        points_along = x[abs(x)==0.5]
+        return (points_inside.size)**2,points_along.size/2*(points_inside.size+1)*4
+    
+    def utility_distance_from_poly_2(self):
+        x = np.linspace(-1,2,int((3/self.grid_finess+1)))
+        y = np.linspace(-1,1,int((2/self.grid_finess+1)))
+        
+        points_inside_x = x[(x>-0.5) & (x<1.5)]
+        points_inside_y = y[abs(y)<0.5]
+        
+        points_along_x = x[(x==-0.5) | (x ==1.5)]
+        points_along_y = y[abs(y)==0.5]
+        
+        return (points_inside_x.size*points_inside_y.size,points_along_x.size/2*(points_inside_x.size+2)*2+points_along_y.size/2*(points_inside_y.size+2)*2-4)
+        
+        

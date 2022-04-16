@@ -95,6 +95,13 @@ Unit testing using a unitary square centered in (0,0) as input labelled with 1
 
 @pytest.fixture
 def unitary_cube(): 
+    """
+    Returns
+    -------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    """
     return [np.array([[1],]),0.1]
     
 
@@ -103,9 +110,11 @@ def test_iterate_shapes_1(unitary_cube):
     """
     Parameters
     ----------
-    segmentation = unitary cube[0] 
-    grid_finess = unitary cube[1]
-
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+     
+    
     Testing
     -------
     Output of the function generator
@@ -116,15 +125,16 @@ def test_iterate_shapes_1(unitary_cube):
     #using function utility used
     
     assert len(test_sdf.utility_iterate_shapes()) == 1     
-    assert test_sdf.utility_iterate_shapes()[0] == [[True]]     
+    assert all(test_sdf.utility_iterate_shapes()[0]) == True     
 
 def test_shape_as_points_1(unitary_cube): 
     """
     Parameters
     ----------
-    segmentation = unitary cube[0] 
-    grid_finess = unitary cube[1]
-
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
     Testing
     -------
     testing length of the output
@@ -134,16 +144,17 @@ def test_shape_as_points_1(unitary_cube):
     test_sdf = sdf_mask(*unitary_cube)
     assert test_sdf.shape_as_points(unitary_cube[0]).shape[0] == 1
     assert test_sdf.shape_as_points(unitary_cube[0]).shape[1] == 2
-    assert test_sdf.shape_as_points(unitary_cube[0]).all() == 0
+    #assert all(test_sdf.shape_as_points(unitary_cube[0])) == 0
 
 
 def test_generate_sides_1(unitary_cube): 
     """
     Parameters
     ----------
-    segmentation = unitary cube[0] 
-    grid_finess = unitary cube[1]
-
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
     Testing
     -------
     testing length of the output
@@ -152,103 +163,220 @@ def test_generate_sides_1(unitary_cube):
     """
     test_sdf = sdf_mask(*unitary_cube)
     assert len(test_sdf.utility_generate_sides()) == 4
-    
+    assert test_sdf.utility_generate_sides()[0] == ((0.5,0.5),(0.5,-0.5)) 
+    assert test_sdf.utility_generate_sides()[1] == ((0.5,-0.5),(-0.5,-0.5)) 
+    assert test_sdf.utility_generate_sides()[2] == ((-0.5,-0.5),(-0.5,0.5)) 
+    assert test_sdf.utility_generate_sides()[3] == ((-0.5,0.5),(0.5,0.5)) 
      
 
-@given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1))))
-def test_iterate_shapes(segmentation): 
+def test_merge_cubes_1(unitary_cube): 
     """
-    Parameters 
-    ----------    
-    segmentetion: numpy.array
-        1D binary mask
-    
-    Testing
-    -------
-    number of shapes obtained corresponds to the real one
-    """
-    
-    #to be ended, try to parametrize the segmentation in order to get one with known shape
-    
-    segmentation= np.array(segmentation)            
-    grid_finess = 0.1
-        
-    if len(segmentation[segmentation!=0])==0:
-        with pytest.raises(AssertionError):
-            assert sdf_mask(segmentation,grid_finess)
-    else:
-        num_shapes = label(segmentation)[1]
-        test_sdf = sdf_mask(segmentation,grid_finess)
-        separeted_pol = [shape for shape in test_sdf.iterate_shapes(segmentation)]
-        assert len(separeted_pol) == num_shapes
-        
-@given(segmentation = st.lists(st.tuples(st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1),st.integers(0,1))))
-
-def test_shape_as_points(segmentation): 
-    """
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
     
 
     Testing
     -------
-    centres of the pixel returned is within segmentation boundaries
-    coordinates returned in 2D
+    For the unitary cube as input, merge_cubes() returns only 
+    the cordinate of the corner of the cube
+    """
+    test_sdf = sdf_mask(*unitary_cube)
+    assert len(test_sdf.merge_cubes(unitary_cube[0])) == 4
+    assert test_sdf.merge_cubes(unitary_cube[0])[0] == (0.5,0.5)
+    assert test_sdf.merge_cubes(unitary_cube[0])[1] == (0.5,-0.5)
+    assert test_sdf.merge_cubes(unitary_cube[0])[2] == (-0.5,-0.5)
+    assert test_sdf.merge_cubes(unitary_cube[0])[3] == (-0.5,0.5)
+    
+    
+def test_distance_from_poly_1(unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    Number of points inside the cube (calculated distance smaller than 0) or 
+    along the side (calculated distance equal to 0) for different grid_finess
+    
+    """
+    #grid_finess = 1, only one point inside the cube, no points along the side
+    test_sdf = sdf_mask(unitary_cube[0],1)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == 1
+    assert test_sdf.distance[test_sdf.distance==0].size == 0
+    
+    
+    #grid_finess = 0.5 only one point inside the cube, 8 over along the side
+    test_sdf = sdf_mask(unitary_cube[0],0.5)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == 1
+    assert test_sdf.distance[test_sdf.distance==0].size == 8
+    
+    #grid_finess = 0.1 81 points inside the cube, and 40 along the side
+    test_sdf = sdf_mask(unitary_cube[0],0.1)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == 81
+    assert test_sdf.distance[test_sdf.distance==0].size == 40
+    
+    #we can compare this with a theoretical value given by the grid_finess using an utility function
+    # which calculates the theoretical number of points inside and along the side of the unitary cube
+    test_sdf = sdf_mask(unitary_cube[0],0.02)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == test_sdf.utility_distance_from_poly_1()[0]
+    assert test_sdf.distance[test_sdf.distance==0].size == test_sdf.utility_distance_from_poly_1()[1]
+
+"""
+Unit testing using two unitary squares side by side, test labelled with 2
+"""
+
+@pytest.fixture
+def two_unitary_cube(): 
+    """
+
+    Returns
+    -------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    """
+    return [np.array([[1],[1]]),0.1]
+    
+def test_iterate_shapes_2(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+    Testing
+    -------
+    Output of the function generator
+    
     """
     
-    segmentation = np.array(segmentation)
+    test_sdf = sdf_mask(*two_unitary_cube)
+    #using function utility used
     
-    grid_finess=0.1
+    assert len(test_sdf.utility_iterate_shapes()) == 1     
+    assert test_sdf.utility_iterate_shapes()[0].size == 2     
+    assert all(test_sdf.utility_iterate_shapes()[0] == True)     
+
+def test_shape_as_points_2(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
     
-    #segmentation = np.array([[0],])
+    Testing
+    -------
+    testing length of the output
+    testing value of the output
     
-    if len(segmentation[segmentation!=0])==0:
-        with pytest.raises(AssertionError):
-            assert sdf_mask(segmentation,grid_finess)
-    
-    
-    else: 
-        test_sdf = sdf_mask(segmentation,grid_finess)    
-        assert np.max(test_sdf.shape_as_points(segmentation)[:,0])<=segmentation[:,0].size
-        assert np.max(test_sdf.shape_as_points(segmentation)[:,1])<=segmentation[0].size
-        assert np.min(test_sdf.shape_as_points(segmentation)[:,0])>=0
-        assert np.min(test_sdf.shape_as_points(segmentation)[:,1])>=0
-        assert test_sdf.shape_as_points(segmentation).shape[1]==2
-        assert(np.all(test_sdf.shape_as_points(segmentation) >= 0))
+    """
+    test_sdf = sdf_mask(*two_unitary_cube)
+    assert test_sdf.shape_as_points(two_unitary_cube[0]).shape[0] == 2
+    assert test_sdf.shape_as_points(two_unitary_cube[0]).shape[1] == 2
+    #assert test_sdf.shape_as_points(two_unitary_cube[0]) == 0
 
 
-@given(points = st.lists(st.tuples(st.integers(0,10),st.integers(0,10)),unique=True))
+def test_generate_sides_2(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
     
-def test_generate_sides(points): 
+    Testing
+    -------
+    testing length of the output
+    testing value of the output
     
-    segmentation = np.array([[0,1],])
-    grid_finess = 0.1
-    test_sdf = sdf_mask(segmentation,grid_finess)
-    
-    
-    points = np.array(points)
-    
-    
-    if np.size(points.shape) < 2:  #the previous tests assure already the right shape 
-        return
-    
-    elif points.shape[1]!=2: 
-        with pytest.raises(AssertionError):
-            assert sdf_mask(segmentation,grid_finess)
-    
-    else:
-        sides_duplicated = {s for s in test_sdf.generate_sides(points)}
-        assert len(sides_duplicated)==4*points.shape[0] 
-    
-    
-    return
+    """
+    test_sdf = sdf_mask(*two_unitary_cube)
+    assert len(test_sdf.utility_generate_sides()) == 8
+    assert test_sdf.utility_generate_sides()[0] == ((0.5,0.5),(0.5,-0.5)) 
+    assert test_sdf.utility_generate_sides()[1] == ((0.5,-0.5),(-0.5,-0.5)) 
+    assert test_sdf.utility_generate_sides()[2] == ((-0.5,-0.5),(-0.5,0.5)) 
+    assert test_sdf.utility_generate_sides()[3] == ((-0.5,0.5),(0.5,0.5)) 
+    assert test_sdf.utility_generate_sides()[4] == ((1.5,0.5),(1.5,-0.5)) 
+    assert test_sdf.utility_generate_sides()[5] == ((1.5,-0.5),(0.5,-0.5)) 
+    assert test_sdf.utility_generate_sides()[6] == ((0.5,-0.5),(0.5,0.5)) 
+    assert test_sdf.utility_generate_sides()[7] == ((0.5,0.5),(1.5,0.5)) 
 
+def test_merge_cubes_2(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
 
-def test_merge_cubes(): 
+    Testing
+    -------
+    For the two side by side unitary cube as input, merge_cubes() returns only 
+    the cordinate of the corner of the rectangle formed by the two, and the two 
+    conjuction points
+    """
+    test_sdf = sdf_mask(*two_unitary_cube)
+    assert len(test_sdf.merge_cubes(two_unitary_cube[0])) == 6
+    assert test_sdf.merge_cubes(two_unitary_cube[0])[0] == (0.5,-0.5)
+    assert test_sdf.merge_cubes(two_unitary_cube[0])[1] == (-0.5,-0.5)
+    assert test_sdf.merge_cubes(two_unitary_cube[0])[2] == (-0.5,0.5)
+    assert test_sdf.merge_cubes(two_unitary_cube[0])[3] == (0.5,0.5)
+    assert test_sdf.merge_cubes(two_unitary_cube[0])[4] == (1.5,0.5)
+    assert test_sdf.merge_cubes(two_unitary_cube[0])[5] == (1.5,-0.5)
+
+def test_distance_from_poly_1(two_unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
     
-    segmentation= np.array([
-    [0, 1, 0, 1, 0, 1, 0, 1]
-    ,])            
+    Testing
+    -------
+    Number of points inside the cube (calculated distance smaller than 0) or 
+    along the side (calculated distance equal to 0) for different grid_finess
     
-    grid_finess = 0.1
+    """
+    #grid_finess = 1
+    test_sdf = sdf_mask(two_unitary_cube[0],1)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == 2
+    assert test_sdf.distance[test_sdf.distance==0].size == 0
     
-    test_sdf = sdf_mask(segmentation,grid_finess)
+    
+    #grid_finess = 0.5
+    test_sdf = sdf_mask(two_unitary_cube[0],0.5)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == 3
+    assert test_sdf.distance[test_sdf.distance==0].size == 12
+    
+    #grid_finess = 0.1
+    test_sdf = sdf_mask(two_unitary_cube[0],0.1)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == 171
+    assert test_sdf.distance[test_sdf.distance==0].size == 60
+    
+    #we can compare this with a theoretical value given by the grid_finess using an utility function
+    # which calculates the theoretical number of points inside and along the side of the unitary cube
+    test_sdf = sdf_mask(two_unitary_cube[0],0.02)
+    test_sdf.sdf()
+    assert test_sdf.distance[test_sdf.distance<0].size == test_sdf.utility_distance_from_poly_2()[0]
+    assert test_sdf.distance[test_sdf.distance==0].size == test_sdf.utility_distance_from_poly_2()[1]
+
 
