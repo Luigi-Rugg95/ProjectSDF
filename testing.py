@@ -125,7 +125,7 @@ def test_iterate_shapes_1(unitary_cube):
     #using function utility used
     
     assert len(test_sdf.utility_iterate_shapes()) == 1     
-    assert all(test_sdf.utility_iterate_shapes()[0]) == True     
+    assert (test_sdf.utility_iterate_shapes()[0] == True).all()     
 
 def test_shape_as_points_1(unitary_cube): 
     """
@@ -190,6 +190,26 @@ def test_merge_cubes_1(unitary_cube):
     assert test_sdf.merge_cubes(unitary_cube[0])[2] == (-0.5,-0.5)
     assert test_sdf.merge_cubes(unitary_cube[0])[3] == (-0.5,0.5)
     
+
+def test_diff_point_array_1(unitary_cube): 
+    """
+    
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    Shape returned after calculating the difference between each vertex and
+    each point of the grid
+    """    
+    
+    test_sdf = sdf_mask(*unitary_cube)
+    
+    
     
 def test_distance_from_poly_1(unitary_cube): 
     """
@@ -232,9 +252,54 @@ def test_distance_from_poly_1(unitary_cube):
     assert test_sdf.distance[test_sdf.distance<0].size == test_sdf.utility_distance_from_poly_1()[0]
     assert test_sdf.distance[test_sdf.distance==0].size == test_sdf.utility_distance_from_poly_1()[1]
 
+
+def test_sdf_1_1(unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    Value of the distance obtained
+    With a grid_finess = 1 we get only 9 points in the grid.
+    The corners points will have the same minimum distance from the poly,
+    this is just the one fourth of the diagonal of the square defined by the grid
+    The other grid points will have same distance, even though the one at the centre
+    will be defined with a negative sign, sign inside the square
+    """
+    
+    test_sdf = sdf_mask(unitary_cube[0],1)
+    assert len(test_sdf.sdf()[test_sdf.sdf() ==0.5]) == 4
+    assert len(test_sdf.sdf()[test_sdf.sdf() ==-0.5]) == 1
+    assert len(test_sdf.sdf()[abs(test_sdf.sdf()) ==np.sqrt(2)/2]) == 4
+    
 """
 Unit testing using two unitary squares side by side, test labelled with 2
 """
+
+def test_sdf_1_2(unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    In the case of one figure the sdf returned is the same as the
+    self.distance returned by distance_from_poly
+    """
+    
+    test_sdf = sdf_mask(unitary_cube[0],1)
+    assert (test_sdf.sdf()-test_sdf.distance == 0).all()
+
+
 
 @pytest.fixture
 def two_unitary_cube(): 
@@ -267,7 +332,7 @@ def test_iterate_shapes_2(two_unitary_cube):
     
     assert len(test_sdf.utility_iterate_shapes()) == 1     
     assert test_sdf.utility_iterate_shapes()[0].size == 2     
-    assert all(test_sdf.utility_iterate_shapes()[0] == True)     
+    assert (test_sdf.utility_iterate_shapes()[0] == True).all()     
 
 def test_shape_as_points_2(two_unitary_cube): 
     """
@@ -338,7 +403,7 @@ def test_merge_cubes_2(two_unitary_cube):
     assert test_sdf.merge_cubes(two_unitary_cube[0])[4] == (1.5,0.5)
     assert test_sdf.merge_cubes(two_unitary_cube[0])[5] == (1.5,-0.5)
 
-def test_distance_from_poly_1(two_unitary_cube): 
+def test_distance_from_poly_2(two_unitary_cube): 
     """
 
     Parameters
@@ -380,3 +445,128 @@ def test_distance_from_poly_1(two_unitary_cube):
     assert test_sdf.distance[test_sdf.distance==0].size == test_sdf.utility_distance_from_poly_2()[1]
 
 
+def test_sdf_2(two_unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+    Testing
+    -------
+    Value of the distance obtained
+    With a grid_finess = 1 we get only 12 points in the grid.
+    The corners points will have the same minimum distance from the poly,
+    this is just the one fourth of the diagonal of the square defined as before
+    The other grid points will have same distance, even though the two at the centre
+    will be defined with a negative sign, since inside the square
+    """
+    
+    test_sdf = sdf_mask(two_unitary_cube[0],1)
+    assert len(test_sdf.sdf()[test_sdf.sdf() ==0.5]) == 6
+    assert len(test_sdf.sdf()[test_sdf.sdf() ==-0.5]) == 2
+    assert len(test_sdf.sdf()[abs(test_sdf.sdf()) ==np.sqrt(2)/2]) == 4
+    
+def test_sdf_2_1(two_unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+    Testing
+    -------
+    In the case of one figure the sdf returned is the same as the
+    self.distance returned by distance_from_poly
+    """
+    
+    test_sdf = sdf_mask(two_unitary_cube[0],1)
+    assert (test_sdf.sdf()-test_sdf.distance == 0).all()
+
+"""
+--------
+Unit testing with two unitary cube separated by a gap, limitating
+the test only to the functions which must recognize that two 
+separated figures are present
+We labe the tests with 3
+--------
+"""
+@pytest.fixture
+def two_cube_separated(): 
+    """
+
+    Returns
+    -------
+    list
+        segmentation = two_cube_separated[0] 
+        grid_finess = two_cube_separated[1]
+    """
+    return [np.array([[1],[0],[1]]),0.1]
+
+
+def test_iterate_shapes_3(two_cube_separated): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_cube_separated[0] 
+        grid_finess = two_cube_separated[1]
+     
+    
+    Testing
+    -------
+    Output of the function generator gives two shapes
+    
+    """
+    
+    test_sdf = sdf_mask(*two_cube_separated)
+    #using function utility used
+    
+    assert len(test_sdf.utility_iterate_shapes()) == 2 #two figures found, than the other functions will work regularly
+
+def test_distance_from_poly_3(two_cube_separated): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = two_cube_separated[0] 
+        grid_finess = two_cube_separated[1]
+    
+    Testing
+    -------
+    We check that we have two sets of distances now, as many as the number of figures  
+    """
+    
+    test_sdf = sdf_mask(*two_cube_separated)
+    test_sdf.sdf()
+    assert len(test_sdf.distances)==2
+
+def test_sdf_3(two_cube_separated): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = two_cube_separated[0] 
+        grid_finess = two_cube_separated[1]
+    
+    Testing
+    -------
+    Value of the distance obtained
+    With a grid_finess = 1 we get only 15 points in the grid.
+    The corners points of the cubes will have the same minimum distance from the two poly,
+    this is just the one fourth of the diagonal of the square defined as before
+    The other grid points will have same distance, even though the two at the centre
+    of the two cubes will be defined with a negative sign
+    """
+    
+    test_sdf = sdf_mask(two_cube_separated[0],1)
+    assert len(test_sdf.sdf()[test_sdf.sdf() ==0.5]) == 7
+    assert len(test_sdf.sdf()[test_sdf.sdf() ==-0.5]) == 2
+    assert len(test_sdf.sdf()[abs(test_sdf.sdf()) ==np.sqrt(2)/2]) == 6
+    

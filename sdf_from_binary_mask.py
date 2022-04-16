@@ -229,7 +229,7 @@ class sdf_from_binary_mask:
         Returns
         -------
         C : numpy.ndarray
-            it returns all the differences as vector between the each point
+            it returns all the differences as vector between each point
             of the grid and each vertex
         
         """    
@@ -237,6 +237,7 @@ class sdf_from_binary_mask:
         A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
         B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
         C = A_p - B_p 
+        print(C.shape)
         assert C.shape == (*A.shape[:-1], *B.shape[:-1], A.shape[-1])
         return C
 
@@ -303,7 +304,6 @@ class sdf_from_binary_mask:
         XY = np.dstack([X, Y])
         points_to_sample = XY.reshape(-1, 2)
         
-        
         for shape in self.iterate_shapes(self.segmentation):
             polygon = self.merge_cubes(shape)
             #print(polygon)
@@ -327,7 +327,7 @@ class sdf_from_binary_mask:
         #getting a list of distance whose length will be the number of shapes
         self.calculate_distances()
         
-        #finding the minimum distance between different points and the shapes ???
+        #finding the minimum distance between different points and the shapes, in the case of one figure it returns self.distances
         final_distance = np.ones_like(self.distances[0])*float("inf")
         for dist_matrix in self.distances:
             final_distance = np.minimum(final_distance, dist_matrix)
@@ -336,7 +336,7 @@ class sdf_from_binary_mask:
     
     """
     ----------
-    Function utilities for testing function generator
+    Function utilities for testing
     ----------
     """
 
