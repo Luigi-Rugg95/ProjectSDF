@@ -252,6 +252,29 @@ def test_distance_from_poly_1(unitary_cube):
     assert test_sdf.distances[test_sdf.distances<0].size == test_sdf.utility_distance_from_poly_1()[0]
     assert test_sdf.distances[test_sdf.distances==0].size == test_sdf.utility_distance_from_poly_1()[1]
 
+def test_calculate_distance_1(unitary_cube): 
+    """
+    
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    Shape of the attribute distances, since we have only one shape,
+    we obtain only one set of distance
+    the shape should be coherent with the dimension of the grid
+
+    """
+    test_sdf = sdf_mask(*unitary_cube)
+    test_sdf.sdf()
+    assert test_sdf.distances.shape[0]==1
+    assert test_sdf.distances.shape[1]==test_sdf.grid()[0].shape[0]
+    assert test_sdf.distances.shape[2]==test_sdf.grid()[0].shape[1]
+    
 
 def test_sdf_1_1(unitary_cube): 
     """
