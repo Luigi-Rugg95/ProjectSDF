@@ -229,28 +229,28 @@ def test_distance_from_poly_1(unitary_cube):
     #grid_finess = 1, only one point inside the cube, no points along the side
     test_sdf = sdf_mask(unitary_cube[0],1)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == 1
-    assert test_sdf.distance[test_sdf.distance==0].size == 0
+    assert test_sdf.distances[test_sdf.distances<0].size == 1
+    assert test_sdf.distances[test_sdf.distances==0].size == 0
     
     
     #grid_finess = 0.5 only one point inside the cube, 8 over along the side
     test_sdf = sdf_mask(unitary_cube[0],0.5)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == 1
-    assert test_sdf.distance[test_sdf.distance==0].size == 8
+    assert test_sdf.distances[test_sdf.distances<0].size == 1
+    assert test_sdf.distances[test_sdf.distances==0].size == 8
     
     #grid_finess = 0.1 81 points inside the cube, and 40 along the side
     test_sdf = sdf_mask(unitary_cube[0],0.1)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == 81
-    assert test_sdf.distance[test_sdf.distance==0].size == 40
+    assert test_sdf.distances[test_sdf.distances<0].size == 81
+    assert test_sdf.distances[test_sdf.distances==0].size == 40
     
     #we can compare this with a theoretical value given by the grid_finess using an utility function
     # which calculates the theoretical number of points inside and along the side of the unitary cube
     test_sdf = sdf_mask(unitary_cube[0],0.02)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == test_sdf.utility_distance_from_poly_1()[0]
-    assert test_sdf.distance[test_sdf.distance==0].size == test_sdf.utility_distance_from_poly_1()[1]
+    assert test_sdf.distances[test_sdf.distances<0].size == test_sdf.utility_distance_from_poly_1()[0]
+    assert test_sdf.distances[test_sdf.distances==0].size == test_sdf.utility_distance_from_poly_1()[1]
 
 
 def test_sdf_1_1(unitary_cube): 
@@ -297,7 +297,7 @@ def test_sdf_1_2(unitary_cube):
     """
     
     test_sdf = sdf_mask(unitary_cube[0],1)
-    assert (test_sdf.sdf()-test_sdf.distance == 0).all()
+    assert (test_sdf.sdf()-test_sdf.distances == 0).all()
 
 
 
@@ -421,28 +421,28 @@ def test_distance_from_poly_2(two_unitary_cube):
     #grid_finess = 1
     test_sdf = sdf_mask(two_unitary_cube[0],1)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == 2
-    assert test_sdf.distance[test_sdf.distance==0].size == 0
+    assert test_sdf.distances[test_sdf.distances<0].size == 2
+    assert test_sdf.distances[test_sdf.distances==0].size == 0
     
     
     #grid_finess = 0.5
     test_sdf = sdf_mask(two_unitary_cube[0],0.5)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == 3
-    assert test_sdf.distance[test_sdf.distance==0].size == 12
+    assert test_sdf.distances[test_sdf.distances<0].size == 3
+    assert test_sdf.distances[test_sdf.distances==0].size == 12
     
     #grid_finess = 0.1
     test_sdf = sdf_mask(two_unitary_cube[0],0.1)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == 171
-    assert test_sdf.distance[test_sdf.distance==0].size == 60
+    assert test_sdf.distances[test_sdf.distances<0].size == 171
+    assert test_sdf.distances[test_sdf.distances==0].size == 60
     
     #we can compare this with a theoretical value given by the grid_finess using an utility function
     # which calculates the theoretical number of points inside and along the side of the unitary cube
     test_sdf = sdf_mask(two_unitary_cube[0],0.02)
     test_sdf.sdf()
-    assert test_sdf.distance[test_sdf.distance<0].size == test_sdf.utility_distance_from_poly_2()[0]
-    assert test_sdf.distance[test_sdf.distance==0].size == test_sdf.utility_distance_from_poly_2()[1]
+    assert test_sdf.distances[test_sdf.distances<0].size == test_sdf.utility_distance_from_poly_2()[0]
+    assert test_sdf.distances[test_sdf.distances==0].size == test_sdf.utility_distance_from_poly_2()[1]
 
 
 def test_sdf_2(two_unitary_cube): 
@@ -481,11 +481,11 @@ def test_sdf_2_1(two_unitary_cube):
     Testing
     -------
     In the case of one figure the sdf returned is the same as the
-    self.distance returned by distance_from_poly
+    self.distances returned by distance_from_poly
     """
     
     test_sdf = sdf_mask(two_unitary_cube[0],1)
-    assert (test_sdf.sdf()-test_sdf.distance == 0).all()
+    assert (test_sdf.sdf()-test_sdf.distances == 0).all()
 
 """
 --------
@@ -544,7 +544,7 @@ def test_distance_from_poly_3(two_cube_separated):
     
     test_sdf = sdf_mask(*two_cube_separated)
     test_sdf.sdf()
-    assert len(test_sdf.distances)==2
+    assert test_sdf.distances.shape[0]==2
 
 def test_sdf_3(two_cube_separated): 
     """

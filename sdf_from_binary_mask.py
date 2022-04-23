@@ -38,7 +38,7 @@ class sdf_from_binary_mask:
     
         self.segmentation = segmentation
         self.grid_finess = abs(grid_finess)
-        self.distances = []
+        self.distances = np.array([[]])
         
        
     def grid(self): 
@@ -237,7 +237,6 @@ class sdf_from_binary_mask:
         A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
         B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
         C = A_p - B_p 
-        print(C.shape)
         assert C.shape == (*A.shape[:-1], *B.shape[:-1], A.shape[-1])
         return C
 
@@ -307,9 +306,11 @@ class sdf_from_binary_mask:
         for shape in self.iterate_shapes(self.segmentation):
             polygon = self.merge_cubes(shape)
             #print(polygon)
-            self.distance= self.distance_from_poly(polygon, points_to_sample)
-            self.distance = self.distance.reshape(*XY.shape[:-1])
-            self.distances.append(self.distance)
+            distance= self.distance_from_poly(polygon, points_to_sample)
+            distance = distance.reshape(*XY.shape[:-1])
+            if self.distances.size == 0: 
+                self.distances = np.array([distance])
+            else:self.distances = np.append(self.distances,[distance],axis=0)
         return 
         
     def sdf(self):
@@ -328,7 +329,7 @@ class sdf_from_binary_mask:
         self.calculate_distances()
         
         #finding the minimum distance between different points and the shapes, in the case of one figure it returns self.distances
-        final_distance = np.ones_like(self.distances[0])*float("inf")
+        final_distance = np.ones_like(self.distances.shape[0])*float("inf")
         for dist_matrix in self.distances:
             final_distance = np.minimum(final_distance, dist_matrix)
         return final_distance
