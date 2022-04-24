@@ -37,9 +37,6 @@ In the following we have an exxample of a single shape obtained from the input :
 
 from left to right the grid_finess is respectively 1,0.5,0.1,0.01. 
 
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/8088f94b767b2ceebdde9d593e12015039e2b227/Examples/shape_grid_1.png" alt="drawing" width="200"/>
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/91a5e337704ae9b28428e72b9db9494309a72a08/Examples/shape_grid_05.png" alt="drawing" width="200"/>
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/91a5e337704ae9b28428e72b9db9494309a72a08/Examples/shape_grid_01.png" alt="drawing" width="200"/>
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/91a5e337704ae9b28428e72b9db9494309a72a08/Examples/shape_grid_001.png" alt="drawing" width="200"/>
+<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/8088f94b767b2ceebdde9d593e12015039e2b227/Examples/shape_grid_1.png" alt="drawing" width="200"/><img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/91a5e337704ae9b28428e72b9db9494309a72a08/Examples/shape_grid_05.png" alt="drawing" width="200"/><img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/91a5e337704ae9b28428e72b9db9494309a72a08/Examples/shape_grid_01.png" alt="drawing" width="200"/><img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/91a5e337704ae9b28428e72b9db9494309a72a08/Examples/shape_grid_001.png" alt="drawing" width="200"/>
 
 
