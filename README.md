@@ -43,7 +43,7 @@ Example of two shapes obtained from the input:
 segmentation = numpy.array([[1,0,0],[0,0,0],[1,1,1]])
 grid_finess = 0.01
 ```
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f9e86612b303f9d5d2b009050bf152a9ed88443e/Examples/shape2_grid_001.png" alt="drawing" width="200"/>
+<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f9e86612b303f9d5d2b009050bf152a9ed88443e/Examples/shape2_grid_001.png" alt="drawing" width="400"/>
 
 Example of three shapes obtained from the input: 
 ```Python
@@ -60,7 +60,7 @@ segmentation = numpy.array([
 ])
 grid_finess = 0.01
 ```
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/5a1d1b8cd53b86c339044f0f690149fa16a41743/Examples/shape3_grid_001.png" alt="drawing" width="200"/>
+<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f76813beb77e2930861e445be7cfd236e1e9f563/Examples/shape3_grid_001.png" alt="drawing" width="400"/>
 
 
 
