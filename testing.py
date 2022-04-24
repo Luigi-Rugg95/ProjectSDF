@@ -74,12 +74,12 @@ def test_init_segmentation():
     
     segmentation=np.array([[[0,1,0],],])
     grid_finess= 0.1
-    with pytest.raises(AssertionError):
+    with pytest.raises(Exception):
             assert sdf_mask(segmentation,grid_finess)
     
     segmentation=np.array([0,1,0])
     grid_finess= 0.1
-    with pytest.raises(AssertionError):
+    with pytest.raises(Exception):
             assert sdf_mask(segmentation,grid_finess)
     
     segmentation=np.array([[0],])

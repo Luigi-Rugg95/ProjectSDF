@@ -34,7 +34,10 @@ class sdf_from_binary_mask:
         #assert grid_finess<=1, "Grid finess too low"
         if grid_finess > 1:
             raise Exception("Too low value of the grid finess")
-        assert np.size(segmentation.shape)==2, "Wrong dimensions for the SDF" 
+        
+        if np.size(segmentation.shape)!=2: 
+            raise Exception("Wrong dimensions of the input")
+        
         assert len(segmentation[segmentation!=0])!=0, "No segmentation found"
     
     
