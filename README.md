@@ -30,4 +30,4 @@ SDF saved
 
 ### **Examples**
 ***
-![shape_grid_1](https://user-images.githubusercontent.com/79461713/164968335-180375aa-d97a-4fcd-a098-b9bff534bd2b.png)
+![shape_grid_1](https://user-images.githubusercontent.com/79461713/164968335-180375aa-d97a-4fcd-a098-b9bff534bd2b.png)<img src="https://user-images.githubusercontent.com/79461713/164968335-180375aa-d97a-4fcd-a098-b9bff534bd2b.png" alt="drawing" width="200"/>
