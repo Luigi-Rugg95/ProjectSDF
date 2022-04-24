@@ -30,4 +30,4 @@ SDF saved
 
 ### **Examples**
 ***
-![Shape 1 grid_finess = 1](https://github.com/Luigi-Rugg95/ProjectSDF/blob/d9e8a2f90a8bcf24478abd0fbacf10f1e1d91318/Examples/shape_grid_1.png)
+![shape_grid_1](https://user-images.githubusercontent.com/79461713/164968335-180375aa-d97a-4fcd-a098-b9bff534bd2b.png)
