@@ -14,9 +14,9 @@ The shape is plotted.
 
 ### **The Project: Main Files**
 ***
-1. [sdf_from_binary_mask.py] (https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/sdf_from_binary_mask.py) : in this file are contained all the functions necessary to calculate the 2D SDF. They are embedded in the class sdf_from_binary_mask, which has as attribute the input _binary mask_ and the _grid finess_, moreover we have as attribute the list of distances for each iterated shape. A method to generate a grid of points, and all the others necessary to generate the 2D SDF. The method sdf() returns the final distances which can then be plotted. 
+1. [sdf_from_binary_mask.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/sdf_from_binary_mask.py) : in this file are contained all the functions necessary to calculate the 2D SDF. They are embedded in the class sdf_from_binary_mask, which has as attribute the input _binary mask_ and the _grid finess_, moreover we have as attribute the list of distances for each iterated shape. A method to generate a grid of points, and all the others necessary to generate the 2D SDF. The method sdf() returns the final distances which can then be plotted. 
 
-2. [plotting.py] (https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/plotting.py): this file contains the method for plotting the SDF, given as input the output of [sdf()](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/sdf_from_binary_mask.py) and the grid. A personal color map is created also and the SDF is saved in a png file at 300 dpi. 
+2. [plotting.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/plotting.py): this file contains the method for plotting the SDF, given as input the output of [sdf()](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/sdf_from_binary_mask.py) and the grid. A personal color map is created also and the SDF is saved in a png file at 300 dpi. 
 
 3. [main.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/main.py) : this file is used for running the calculations
 
@@ -30,3 +30,4 @@ SDF saved
 
 ### **Examples**
 ***
+![Shape 1 grid_finess = 1](https://github.com/Luigi-Rugg95/ProjectSDF/blob/d9e8a2f90a8bcf24478abd0fbacf10f1e1d91318/Examples/shape_grid_1.png)
