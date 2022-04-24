@@ -27,3 +27,6 @@ pip install -r requirements.txt
 run the main, where an input segmentation and grid_fines can be specified
 
 SDF saved
+
+### **Examples**
+***
