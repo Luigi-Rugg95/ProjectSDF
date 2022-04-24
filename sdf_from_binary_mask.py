@@ -6,9 +6,9 @@ Created on Sun Mar  6 10:30:50 2022
 """
 
 import numpy as np
-import pylab as plt
-from scipy.ndimage import label, generate_binary_structure
+from scipy.ndimage import label
 
+#import pylab as plt
 
 
 class sdf_from_binary_mask: 
@@ -31,7 +31,9 @@ class sdf_from_binary_mask:
         """
         
         #needs to be turned into if conditional
-        assert grid_finess<=1, "Grid finess too low"
+        #assert grid_finess<=1, "Grid finess too low"
+        if grid_finess > 1:
+            raise Exception("Too low value of the grid finess")
         assert np.size(segmentation.shape)==2, "Wrong dimensions for the SDF" 
         assert len(segmentation[segmentation!=0])!=0, "No segmentation found"
     
@@ -208,13 +210,6 @@ class sdf_from_binary_mask:
     
     """
     
-    """
-     
-    Info function: 
-        
-        
-     
-    """ 
     def diff_point_array(self, A, B):
         """
         
@@ -232,7 +227,9 @@ class sdf_from_binary_mask:
             it returns all the differences as vector between each point
             of the grid and each vertex
         
-        """    
+        """ 
+        #print(A)
+        #print(B)
         assert A.shape[-1] == B.shape[-1]
         A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
         B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
@@ -334,13 +331,14 @@ class sdf_from_binary_mask:
             final_distance = np.minimum(final_distance, dist_matrix)
         return final_distance
     
-    
     """
     ----------
     Function utilities for testing
     ----------
     """
-
+    
+    
+    
     def utility_iterate_shapes(self): 
         separeted_pol = [shape for shape in self.iterate_shapes(self.segmentation)]
         return separeted_pol
@@ -366,5 +364,6 @@ class sdf_from_binary_mask:
         points_along_y = y[abs(y)==0.5]
         
         return (points_inside_x.size*points_inside_y.size,points_along_x.size/2*(points_inside_x.size+2)*2+points_along_y.size/2*(points_inside_y.size+2)*2-4)
-        
-        
+    
+    
+    

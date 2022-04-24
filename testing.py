@@ -5,18 +5,18 @@ Created on Mon Feb 28 13:43:42 2022
 @author: Luigi
 """
 
-#from functions import final_distances,distance_from_poly,diff_point_array,merge_cubes,generate_sides,shape_as_points,iterate_shapes
 
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
+from function_utilities import utility_distance_from_poly_1,utility_distance_from_poly_2,utility_generate_sides,utility_iterate_shapes
 
 import numpy as np
-from scipy.ndimage import label, generate_binary_structure
-
-from hypothesis import strategies as st
-from hypothesis import given
-from hypothesis import settings
-from datetime import timedelta
 import pytest
+
+#from scipy.ndimage import label, generate_binary_structure
+#from hypothesis import strategies as st
+#from hypothesis import given
+#from hypothesis import settings
+#from datetime import timedelta
 
 
 def test_sdf_init_grid_finess(): 
@@ -33,9 +33,8 @@ def test_sdf_init_grid_finess():
     segmentation = np.array([[1],])
     
     grid_finess=2
-    with pytest.raises(AssertionError):
+    with pytest.raises(Exception):
         assert sdf_mask(segmentation,grid_finess)
-        
     
     
 
@@ -124,8 +123,8 @@ def test_iterate_shapes_1(unitary_cube):
     test_sdf = sdf_mask(*unitary_cube)
     #using function utility used
     
-    assert len(test_sdf.utility_iterate_shapes()) == 1     
-    assert (test_sdf.utility_iterate_shapes()[0] == True).all()     
+    assert len(utility_iterate_shapes(unitary_cube[0])) == 1     
+    assert (utility_iterate_shapes(unitary_cube[0])[0] == True).all()     
 
 def test_shape_as_points_1(unitary_cube): 
     """
@@ -162,11 +161,11 @@ def test_generate_sides_1(unitary_cube):
     
     """
     test_sdf = sdf_mask(*unitary_cube)
-    assert len(test_sdf.utility_generate_sides()) == 4
-    assert test_sdf.utility_generate_sides()[0] == ((0.5,0.5),(0.5,-0.5)) 
-    assert test_sdf.utility_generate_sides()[1] == ((0.5,-0.5),(-0.5,-0.5)) 
-    assert test_sdf.utility_generate_sides()[2] == ((-0.5,-0.5),(-0.5,0.5)) 
-    assert test_sdf.utility_generate_sides()[3] == ((-0.5,0.5),(0.5,0.5)) 
+    assert len(utility_generate_sides(unitary_cube[0])) == 4
+    assert utility_generate_sides(unitary_cube[0])[0] == ((0.5,0.5),(0.5,-0.5)) 
+    assert utility_generate_sides(unitary_cube[0])[1] == ((0.5,-0.5),(-0.5,-0.5)) 
+    assert utility_generate_sides(unitary_cube[0])[2] == ((-0.5,-0.5),(-0.5,0.5)) 
+    assert utility_generate_sides(unitary_cube[0])[3] == ((-0.5,0.5),(0.5,0.5)) 
      
 
 def test_merge_cubes_1(unitary_cube): 
@@ -203,12 +202,51 @@ def test_diff_point_array_1(unitary_cube):
     
     Testing
     -------
-    Shape returned after calculating the difference between each vertex and
-    each point of the grid
+    Array of distances as vector returned after calculating 
+    the difference between one point at the origin and 
+    whatever point in the grid, this should always return the coordinate
+    of the point of the grid itself
     """    
     
     test_sdf = sdf_mask(*unitary_cube)
+    grid_points = np.array([-1,-1])
+    origin = np.array([0,0])
+    assert(test_sdf.diff_point_array(grid_points,origin) == grid_points).all()
     
+    grid_points = np.array([-1,1])
+    assert(test_sdf.diff_point_array(grid_points,origin) == grid_points).all()
+    
+    grid_points = np.array([1,1])
+    assert(test_sdf.diff_point_array(grid_points,origin) == grid_points).all()
+
+def test_diff_point_array_2(unitary_cube): 
+    """
+    
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    Array of distances as vector returned after calculating 
+    the difference between one point at the (1,1) and 
+    whatever point in the grid
+    """    
+    
+    test_sdf = sdf_mask(*unitary_cube)
+    grid_points = np.array([-1,-1])
+    point = np.array([1,1])
+    assert(test_sdf.diff_point_array(grid_points,point) == [-2,-2]).all()
+    
+    grid_points = np.array([3,3])
+    assert(test_sdf.diff_point_array(grid_points,point) == [2,2]).all()
+    
+    grid_points = np.array([0,0])
+    assert(test_sdf.diff_point_array(grid_points,point) == [-1,-1]).all()
+
     
     
 def test_distance_from_poly_1(unitary_cube): 
@@ -249,8 +287,8 @@ def test_distance_from_poly_1(unitary_cube):
     # which calculates the theoretical number of points inside and along the side of the unitary cube
     test_sdf = sdf_mask(unitary_cube[0],0.02)
     test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == test_sdf.utility_distance_from_poly_1()[0]
-    assert test_sdf.distances[test_sdf.distances==0].size == test_sdf.utility_distance_from_poly_1()[1]
+    assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_1(0.02)[0]
+    assert test_sdf.distances[test_sdf.distances==0].size == utility_distance_from_poly_1(0.02)[1]
 
 def test_calculate_distance_1(unitary_cube): 
     """
@@ -353,9 +391,9 @@ def test_iterate_shapes_2(two_unitary_cube):
     test_sdf = sdf_mask(*two_unitary_cube)
     #using function utility used
     
-    assert len(test_sdf.utility_iterate_shapes()) == 1     
-    assert test_sdf.utility_iterate_shapes()[0].size == 2     
-    assert (test_sdf.utility_iterate_shapes()[0] == True).all()     
+    assert len(utility_iterate_shapes(two_unitary_cube[0])) == 1     
+    assert utility_iterate_shapes(two_unitary_cube[0])[0].size == 2     
+    assert (utility_iterate_shapes(two_unitary_cube[0])[0] == True).all()     
 
 def test_shape_as_points_2(two_unitary_cube): 
     """
@@ -392,15 +430,15 @@ def test_generate_sides_2(two_unitary_cube):
     
     """
     test_sdf = sdf_mask(*two_unitary_cube)
-    assert len(test_sdf.utility_generate_sides()) == 8
-    assert test_sdf.utility_generate_sides()[0] == ((0.5,0.5),(0.5,-0.5)) 
-    assert test_sdf.utility_generate_sides()[1] == ((0.5,-0.5),(-0.5,-0.5)) 
-    assert test_sdf.utility_generate_sides()[2] == ((-0.5,-0.5),(-0.5,0.5)) 
-    assert test_sdf.utility_generate_sides()[3] == ((-0.5,0.5),(0.5,0.5)) 
-    assert test_sdf.utility_generate_sides()[4] == ((1.5,0.5),(1.5,-0.5)) 
-    assert test_sdf.utility_generate_sides()[5] == ((1.5,-0.5),(0.5,-0.5)) 
-    assert test_sdf.utility_generate_sides()[6] == ((0.5,-0.5),(0.5,0.5)) 
-    assert test_sdf.utility_generate_sides()[7] == ((0.5,0.5),(1.5,0.5)) 
+    assert len(utility_generate_sides(two_unitary_cube[0])) == 8
+    assert utility_generate_sides(two_unitary_cube[0])[0] == ((0.5,0.5),(0.5,-0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[1] == ((0.5,-0.5),(-0.5,-0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[2] == ((-0.5,-0.5),(-0.5,0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[3] == ((-0.5,0.5),(0.5,0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[4] == ((1.5,0.5),(1.5,-0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[5] == ((1.5,-0.5),(0.5,-0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[6] == ((0.5,-0.5),(0.5,0.5)) 
+    assert utility_generate_sides(two_unitary_cube[0])[7] == ((0.5,0.5),(1.5,0.5)) 
 
 def test_merge_cubes_2(two_unitary_cube): 
     """
@@ -464,8 +502,8 @@ def test_distance_from_poly_2(two_unitary_cube):
     # which calculates the theoretical number of points inside and along the side of the unitary cube
     test_sdf = sdf_mask(two_unitary_cube[0],0.02)
     test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == test_sdf.utility_distance_from_poly_2()[0]
-    assert test_sdf.distances[test_sdf.distances==0].size == test_sdf.utility_distance_from_poly_2()[1]
+    assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_2(0.02)[0]
+    assert test_sdf.distances[test_sdf.distances==0].size == utility_distance_from_poly_2(0.02)[1]
 
 
 def test_sdf_2(two_unitary_cube): 
@@ -549,7 +587,7 @@ def test_iterate_shapes_3(two_cube_separated):
     test_sdf = sdf_mask(*two_cube_separated)
     #using function utility used
     
-    assert len(test_sdf.utility_iterate_shapes()) == 2 #two figures found, than the other functions will work regularly
+    assert len(utility_iterate_shapes(two_cube_separated[0])) == 2 #two figures found, than the other functions will work regularly
 
 def test_distance_from_poly_3(two_cube_separated): 
     """

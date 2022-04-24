@@ -5,8 +5,9 @@ Created on Sun Feb 20 19:04:12 2022
 @author: Luigi
 """
 
-import random as rm
+#import random as rm
 import numpy as np
+import time
 
 #importing functions
 from plotting import plotting
@@ -27,9 +28,12 @@ segmentation = np.array([
 
 segmentation = np.array([[1],])
 
-
-f = sdf_mask(segmentation, 1)
-#print(f.grid()[0])
+start = time.time()
+f = sdf_mask(segmentation,1)
 plotting(f.sdf(),*f.grid())
+end=time.time()
+print(end-start)
 
-#print(f.utility_generate_sides()[0])
+grid_points = np.array([0,0])
+poly = np.array([1,1])
+print(f.diff_point_array(grid_points,poly))
