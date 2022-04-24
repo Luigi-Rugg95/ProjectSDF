@@ -30,6 +30,7 @@ SDF saved
 
 ### **Examples**
 ***
+<<<<<<< HEAD
 In the following we have an example of a single shape obtained from the input :
 ```Python
 [[1,0,0],[1,1,0],[1,1,1]]
@@ -45,3 +46,6 @@ grid_finess = 0.01
 ```
 <img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f9e86612b303f9d5d2b009050bf152a9ed88443e/Examples/shape2_grid_001.png" alt="drawing" width="200"/>
 
+=======
+![Shape 1 grid_finess = 1](https://github.com/Luigi-Rugg95/ProjectSDF/blob/d9e8a2f90a8bcf24478abd0fbacf10f1e1d91318/Examples/shape_grid_1.png)
+>>>>>>> f74d265 (more examples)

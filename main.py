@@ -12,20 +12,20 @@ import time
 from plotting import plotting
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
 
-"""
 segmentation = np.array([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
 ])
-"""
 
 
-segmentation = np.array([[1,0,0],[0,0,0],[1,1,1]])
+#segmentation = np.array([[1,0,0],[1,1,0],[1,1,1]])
 
 start = time.time()
 f = sdf_mask(segmentation,0.01)
