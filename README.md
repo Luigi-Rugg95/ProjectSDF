@@ -30,10 +30,9 @@ SDF saved
 
 ### **Examples**
 ***
-<<<<<<< HEAD
 In the following we have an example of a single shape obtained from the input :
 ```Python
-[[1,0,0],[1,1,0],[1,1,1]]
+segmentation = numpy.array([[1,0,0],[1,1,0],[1,1,1]])
 grid_finess = [ 1, 0.5, 0.1, 0.01] #from left to right
 ```
 
@@ -41,11 +40,27 @@ grid_finess = [ 1, 0.5, 0.1, 0.01] #from left to right
 
 Example of two shapes obtained from the input: 
 ```Python
-[[1,0,0],[0,0,0],[1,1,1]]
+segmentation = numpy.array([[1,0,0],[0,0,0],[1,1,1]])
 grid_finess = 0.01
 ```
 <img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f9e86612b303f9d5d2b009050bf152a9ed88443e/Examples/shape2_grid_001.png" alt="drawing" width="200"/>
 
-=======
-![Shape 1 grid_finess = 1](https://github.com/Luigi-Rugg95/ProjectSDF/blob/d9e8a2f90a8bcf24478abd0fbacf10f1e1d91318/Examples/shape_grid_1.png)
->>>>>>> f74d265 (more examples)
+Example of three shapes obtained from the input: 
+```Python
+segmentation = numpy.array([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+])
+grid_finess = 0.01
+```
+<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/5a1d1b8cd53b86c339044f0f690149fa16a41743/Examples/shape3_grid_001.png" alt="drawing" width="200"/>
+
+
+
