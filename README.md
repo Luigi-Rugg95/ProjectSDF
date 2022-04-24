@@ -60,7 +60,7 @@ segmentation = numpy.array([
 ])
 grid_finess = 0.01
 ```
-<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f76813beb77e2930861e445be7cfd236e1e9f563/Examples/shape3_grid_001.png" alt="drawing" width="400"/>
+<img src="https://github.com/Luigi-Rugg95/ProjectSDF/blob/f76813beb77e2930861e445be7cfd236e1e9f563/Examples/shape3_grid_001.png" alt="drawing" width="600"/>
 
 
 
