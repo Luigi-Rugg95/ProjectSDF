@@ -290,7 +290,6 @@ class sdf_from_binary_mask:
         cs = np.where(cb, -1, 1)
         s = np.multiply.reduce(cs.T)
         sdf = s*d
-        print(sdf.shape)
         return sdf
     
     
