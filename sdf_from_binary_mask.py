@@ -15,14 +15,13 @@ class sdf_from_binary_mask:
     
     def __init__(self,segmentation,grid_finess):
         """
-        
 
         Parameters
         ----------
         segmentation : numpy.ndarray
             binary mask given as initial input for calculating the sdf
         grid_finess : float
-            finess of the grid, value between (0,1)
+            finess of the grid used to calculate the sdf
 
         Returns
         -------
@@ -30,8 +29,6 @@ class sdf_from_binary_mask:
 
         """
         
-        #needs to be turned into if conditional
-        #assert grid_finess<=1, "Grid finess too low"
         if grid_finess > 1:
             raise Exception("Too low value of the grid finess")
         
@@ -53,8 +50,15 @@ class sdf_from_binary_mask:
         -------
         X: numpy.ndarray
         Y: numpy.ndarray
-            fine grid used to calculate the distances
+            fine grid used to calculate the distances, the limit of the 
+            grid are set in order to contain the whole segmentation
+        
+        Example
         -------
+        An input of the form segmentation = segmentation = np.array([[1],])
+        which is a unitary square centered in the origin,
+        will return a grid with boundary [-1,+1]
+
         
         """
         limit_grid = [self.segmentation[:,0].size, self.segmentation[0].size]
@@ -80,7 +84,7 @@ class sdf_from_binary_mask:
         Parameters
         ----------
         image : numpy.ndarray 
-            input binary blob mask given in the main
+            input binary blob mask given in the main (segmentation in the class)
 
         Yield 
         -----
@@ -99,12 +103,6 @@ class sdf_from_binary_mask:
             yield labeled_array==idx
     
     
-    """
-    Info function: 
-        
-        
-    
-    """
     
     def shape_as_points(self,shape):
         """
@@ -258,6 +256,10 @@ class sdf_from_binary_mask:
         -------
         sdf : numpy.float64
             calculated sdf
+        
+        Description
+        -----------
+        
 
         """
         p = np.ascontiguousarray(points)
@@ -296,7 +298,10 @@ class sdf_from_binary_mask:
         
         Description
         -----------
-        
+        the process is here iterated: 
+            1. Shapes are found and labelled
+            2. The unitary cubes which forms a shape are merged and the side are returned
+            3. The SDF for each shape is calculated and stored in the list distances
         """
         X,Y = self.grid()
         
@@ -305,7 +310,6 @@ class sdf_from_binary_mask:
         
         for shape in self.iterate_shapes(self.segmentation):
             polygon = self.merge_cubes(shape)
-            #print(polygon)
             distance= self.distance_from_poly(polygon, points_to_sample)
             distance = distance.reshape(*XY.shape[:-1])
             if self.distances.size == 0: 
@@ -319,10 +323,13 @@ class sdf_from_binary_mask:
         Returns
         -------
         final_distance : numpy.float64
-            SDF to be plotted
+            calculated SDF referred to the merge of the shape
 
         Description
         -----------
+        Starting from all the calculated distance for each shape found, 
+        this will find the minimum distances and merge them to obtain the final result
+        
         """
         
         #getting a list of distance whose length will be the number of shapes
@@ -334,39 +341,6 @@ class sdf_from_binary_mask:
             final_distance = np.minimum(final_distance, dist_matrix)
         return final_distance
     
-    """
-    ----------
-    Function utilities for testing
-    ----------
-    """
-    
-    
-    
-    def utility_iterate_shapes(self): 
-        separeted_pol = [shape for shape in self.iterate_shapes(self.segmentation)]
-        return separeted_pol
-        
-    def utility_generate_sides(self): 
-        sides = [((p1,p2)) for p1,p2 in self.generate_sides(self.shape_as_points(self.segmentation))]
-        return sides
-    
-    def utility_distance_from_poly_1(self):
-        x = np.linspace(-1,1,int((2/self.grid_finess+1)))
-        points_inside = x[abs(x)<0.5]
-        points_along = x[abs(x)==0.5]
-        return (points_inside.size)**2,points_along.size/2*(points_inside.size+1)*4
-    
-    def utility_distance_from_poly_2(self):
-        x = np.linspace(-1,2,int((3/self.grid_finess+1)))
-        y = np.linspace(-1,1,int((2/self.grid_finess+1)))
-        
-        points_inside_x = x[(x>-0.5) & (x<1.5)]
-        points_inside_y = y[abs(y)<0.5]
-        
-        points_along_x = x[(x==-0.5) | (x ==1.5)]
-        points_along_y = y[abs(y)==0.5]
-        
-        return (points_inside_x.size*points_inside_y.size,points_along_x.size/2*(points_inside_x.size+2)*2+points_along_y.size/2*(points_inside_y.size+2)*2-4)
     
     
     
