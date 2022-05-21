@@ -18,9 +18,9 @@ The shape is plotted.
 
 2. [plotting.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/plotting.py): this file contains the method for plotting the SDF, given as input the output of [sdf()](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/sdf_from_binary_mask.py) and the grid. A personal color map is created also and the SDF is saved in a png file at 300 dpi. 
 
-3. [main.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/main.py) : this file is used for running the calculations
+3. [main.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/main.py) : this file is used for running the calculations.
 
-4. [testing.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/testing.py) : this file contains all the test which are made. Considering how the program works, test are done on simple input: one unitary cube (labelled 1), two unitary cube side by side (labelled 2), two unitary cube separated (labelled 3). In this way we can check the reliability of the calculation of the sdf calculation, the reliability when multiple shapes are found, and in the case in which a shape is formed by more then a unitary cube (one pixel).
+4. [testing.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/testing.py) : this file contains all the tests which are made. Considering how the program works, test are done on simple input: one unitary cube (labelled 1), two unitary cube side by side (labelled 2), two unitary cube separated (labelled 3). In this way we can check the reliability of the calculation of the sdf calculation, the reliability when multiple shapes are found, and in the case in which a shape is formed by more then a unitary cube (one pixel).
 
 to run the script: 
 
