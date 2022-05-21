@@ -12,11 +12,6 @@ from function_utilities import utility_distance_from_poly_1,utility_distance_fro
 import numpy as np
 import pytest
 
-#from scipy.ndimage import label, generate_binary_structure
-#from hypothesis import strategies as st
-#from hypothesis import given
-#from hypothesis import settings
-#from datetime import timedelta
 
 
 def test_sdf_init_grid_finess(): 
