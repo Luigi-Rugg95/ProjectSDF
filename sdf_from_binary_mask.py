@@ -254,12 +254,16 @@ class sdf_from_binary_mask:
 
         Returns
         -------
-        sdf : numpy.float64
+        sdf : numpy.ndarray with shape equal to the total number of points in the grid
             calculated sdf
         
         Description
         -----------
-        
+        the function is the one which calculates effectively the minimum distance
+        beetween one point of the grid and the side of the shape (poly here), and
+        this is iterated for all the points of the grid. The result will be positive
+        if the point lays outside the shape, and negative if the point lays 
+        inside the shape. 
 
         """
         p = np.ascontiguousarray(points)
@@ -286,6 +290,7 @@ class sdf_from_binary_mask:
         cs = np.where(cb, -1, 1)
         s = np.multiply.reduce(cs.T)
         sdf = s*d
+        print(sdf.shape)
         return sdf
     
     
@@ -307,6 +312,7 @@ class sdf_from_binary_mask:
         
         XY = np.dstack([X, Y])
         points_to_sample = XY.reshape(-1, 2)
+        
         
         for shape in self.iterate_shapes(self.segmentation):
             polygon = self.merge_cubes(shape)

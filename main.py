@@ -23,7 +23,7 @@ segmentation = np.array([
     [0, 0, 0, 0, 0, 0, 0],
 ])
 
-segmentation = np.array([[1],])
+segmentation = np.array([[1],[0],[1]])
 
-sdf = sdf_mask(segmentation,0.01)
+sdf = sdf_mask(segmentation,1)
 plotting(sdf.sdf(),*sdf.grid())
