@@ -32,12 +32,32 @@ mycmap = LinearSegmentedColormap.from_list(
 )
 
 
-def plotting(final_distance, X, Y):
+def plotting(final_distance, X, Y, save):
+    """
+    
+
+    Parameters
+    ----------
+    final_distance : numpy.ndarray
+        SDF to be plotted
+    X : numpy.ndarray
+        x-axis of the fine grid
+    Y : numpy.ndarray
+        y-axis of the fine grid
+    save : when this is equal to "y" it saves the figure
+        
+
+    Returns
+    -------
+    None.
+
+    """
     props = dict(aspect="equal", origin="lower", extent=(X.min(), X.max(), Y.min(), Y.max()))
     fig, ax = plt.subplots(figsize=(np.minimum(np.max(X),20), np.minimum(np.max(Y),20)), dpi=300)
     norm_d = mcolors.TwoSlopeNorm(vmin=final_distance.min(), vcenter=0, vmax=final_distance.max())
     ax.imshow(final_distance.T, norm=norm_d, cmap=mycmap, **props)
-    fig.savefig('shape.png')
+    if save=="y":
+        fig.savefig('shape.png')
     #plt.close('all')
     return
 
