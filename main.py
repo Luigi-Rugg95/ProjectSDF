@@ -24,7 +24,7 @@ segmentation = np.array([
 ])
 
 
-2dsdf = sdf_mask(segmentation,0.1) #parameters: segmentation, grid_finess
+twodsdf = sdf_mask(segmentation,0.1) #parameters: segmentation, grid_finess
 
 
-plotting(2dsdf.sdf(),*2dsdf.grid(), "n") #parameters: sdf, *grid, if "y" it saves the figure
+plotting(twodsdf.sdf(),*twodsdf.grid(), "n") #parameters: sdf, *grid, if "y" it saves the figure
