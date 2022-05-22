@@ -22,6 +22,9 @@ The shape is plotted.
 
 4. [testing.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/testing.py) : this file contains all the tests which are made. Considering how the program works, test are done on simple input: one unitary cube (labelled 1), two unitary cube side by side (labelled 2), two unitary cube separated (labelled 3). In this way we can check the reliability of the calculation of the sdf calculation, the reliability when multiple shapes are found, and in the case in which a shape is formed by more then a unitary cube (one pixel).
 
+5. [requirements.txt](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/requirements.txt) : this file contains the requirements to be installed before running the script, it has been obtained using the command [pipreqs](https://pypi.org/project/pipreqs/) . 
+
+6. [function_utilities.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/function_utilities.py) : here are present some functions useful for testing. 
 to run the script: 
 
 pip install -r requirements.txt
