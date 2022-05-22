@@ -29,9 +29,9 @@ to run the script:
 
 pip install -r requirements.txt
 
-run the main, where an input segmentation and grid_fines can be specified
+run the main, where an input segmentation and grid_finess can be specified
 
-SDF saved
+SDF saved with 300 dpi
 
 ### **Examples**
 ***
