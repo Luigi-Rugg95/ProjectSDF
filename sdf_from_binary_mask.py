@@ -55,11 +55,14 @@ class sdf_from_binary_mask:
         
         Example
         -------
-        An input of the form segmentation = segmentation = np.array([[1],])
+        1. An input of the form segmentation = segmentation = np.array([[1],])
         which is a unitary square centered in the origin,
-        will return a grid with boundary [-1,+1]
+        will return a grid with boundary [-1,+1] in both x and y
 
-        
+        2. An input of the form segmentation = segmentation = np.array([[1,0],)
+        which is a unitary square centered in the origin,
+        will return a grid with boundary [-1,+2] in x and boundary [-1,+1] in y
+
         """
         limit_grid = [self.segmentation[:,0].size, self.segmentation[0].size]
         #creating a meshgrid
@@ -93,7 +96,7 @@ class sdf_from_binary_mask:
             
         Description
         -----------    
-            find disconnected shapes in a black and white 
+            it finds disconnected shapes in a black and white 
             image and it returns them one by one
         
         """
@@ -241,20 +244,23 @@ class sdf_from_binary_mask:
     
     
     
-    # dato un poligono descritto come lista di punti ed una matrice di posizioni x, y, ne calcola la sdf
     def distance_from_poly(self,poly,points):
         """
 
         Parameters
         ----------
-        poly : numpy.ndarray
-            polygon obtained from the input binary mask
-        points : numpy.ndarray
+        poly : list 
+            polygon obtained from the input binary mask    
+            Each element has length 2, given that 
+            we are working in a 2D environment.
+            
+        points : numpy.ndarray shape (2,:)
             coordinates of the points of the grid
 
         Returns
         -------
-        sdf : numpy.ndarray with shape equal to the total number of points in the grid
+        sdf : numpy.ndarray 
+            shape equal to the total number of points in the grid
             calculated sdf
         
         Description
@@ -262,7 +268,7 @@ class sdf_from_binary_mask:
         the function is the one which calculates effectively the minimum distance
         beetween one point of the grid and the side of the shape (poly here), and
         this is iterated for all the points of the grid. The result will be positive
-        if the point lays outside the shape, and negative if the point lays 
+        if the point lies outside the shape, and negative if the point lies 
         inside the shape. 
 
         """
@@ -275,10 +281,10 @@ class sdf_from_binary_mask:
         # difference (as vector) between each point and each vertex
         w = self.diff_point_array(p, vi)
         # calculate the distance from each segment
-        ee = np.einsum("ij, ij -> i", e, e) # scalar product keeping the righ sizes
-        we = np.einsum("kij, ij -> ki", w, e) # scalar product keeping the righ sizes
+        ee = np.einsum("ij, ij -> i", e, e) # scalar product keeping the right sizes
+        we = np.einsum("kij, ij -> ki", w, e) # scalar product keeping the right sizes
         b = w - e*np.clip( we/ee , 0, 1)[..., np.newaxis]
-        bb = np.einsum("kij, kij -> ki", b, b) # scalar product keeping the righ sizes
+        bb = np.einsum("kij, kij -> ki", b, b) # scalar product keeping the right sizes
         # the distance is the minimum of the distances from all the points
         d = np.sqrt(np.min(bb, axis=-1))
         # check if the point is inside or outside
@@ -332,9 +338,9 @@ class sdf_from_binary_mask:
 
         Description
         -----------
-        Starting from all the calculated distance for each shape found, 
+        Starting from all the calculated distances for each shape found, 
         this will find the minimum distances and merge them to obtain the final result
-        
+        which can be plotted using plotting() in plotting.py
         """
         
         #getting a list of distance whose length will be the number of shapes

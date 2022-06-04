@@ -17,7 +17,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 
 
-# color map for plotting SDF
+# defining a color map for plotting the SDF
 delta = 0.001
 mycmap = LinearSegmentedColormap.from_list(
     "mycmap",
@@ -58,6 +58,6 @@ def plotting(final_distance, X, Y, save):
     ax.imshow(final_distance.T, norm=norm_d, cmap=mycmap, **props)
     if save=="y":
         fig.savefig('shape.png')
-    #plt.close('all')
+    plt.close('all')
     return
 
