@@ -192,7 +192,7 @@ class sdf_from_binary_mask:
         sides_duplicated = {s for s in self.generate_sides(points)}
         # the sides that are duplicated are inside the shape and needs to be removed
         sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
-        # terrible algorithm to re-thread the sides in a polygon
+        # algorithm to re-thread the sides in a polygon
         final_points = []
         pa, pb = next(iter(sides))
         ended = False
