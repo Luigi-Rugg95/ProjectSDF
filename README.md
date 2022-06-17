@@ -31,7 +31,19 @@ pip install -r requirements.txt
 
 run the main, where an input segmentation and grid_finess can be specified
 
-SDF saved with 300 dpi
+the output and input are written respectively in sdf_output.txt and input.txt
+and overwritten at each run
+
+the finess of the grid is also saved in order to be able to plot the shape when
+data are loaded
+
+the sdf output can be loaded with the command 
+
+```Python
+numpy.loadtxt("sdf_output.txt")
+```
+
+SDF can be saved as 300 dpi .png 
 
 ### **Examples**
 ***
