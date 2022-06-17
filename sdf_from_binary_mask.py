@@ -69,8 +69,7 @@ class sdf_from_binary_mask:
         X, Y = np.mgrid[-1:limit_grid[0]+self.grid_finess:self.grid_finess,-1:limit_grid[1]+self.grid_finess:self.grid_finess]
         
         
-        return X,Y
-        
+        return X,Y    
     
     """
     --------------------------------------------
@@ -350,8 +349,30 @@ class sdf_from_binary_mask:
         final_distance = np.ones_like(self.distances.shape[0])*float("inf")
         for dist_matrix in self.distances:
             final_distance = np.minimum(final_distance, dist_matrix)
+        
+        self.write_sdf(final_distance)
+        
         return final_distance
     
-    
+    def write_sdf(self,sdf_data): 
+        """
+        
+
+        Parameters
+        ----------
+        sdf_data : numpy.ndarray
+            calculated sdf
+
+        Description
+        -------
+        Write the sdf and the segmentation respectively in shape.txt an input.txt
+        The data can be loaded using the function numpy.loadtxt in a numpy.array
+        which can be used to plot the values
+        """
+        first_line = "SDF data obtained using a grid finess =" + str(self.grid_finess) 
+        np.savetxt("sdf_output.txt",sdf_data, header = first_line)
+        np.savetxt("input.txt",self.segmentation, header = "segmantation")
+        
+        return
     
     
