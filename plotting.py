@@ -57,7 +57,7 @@ def plotting(final_distance, X, Y, save):
     norm_d = mcolors.TwoSlopeNorm(vmin=final_distance.min(), vcenter=0, vmax=final_distance.max())
     ax.imshow(final_distance.T, norm=norm_d, cmap=mycmap, **props)
     if save=="y":
-        fig.savefig('shape.png')
+        fig.savefig('sdf_output.png')
     plt.close('all')
     return
 
