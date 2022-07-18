@@ -357,11 +357,9 @@ class sdf_from_binary_mask:
         for dist_matrix in self.distances:
             final_distance = np.minimum(final_distance, dist_matrix)
         
-        self.write_sdf(final_distance)
-        
         return final_distance
     
-    def write_sdf(self,sdf_data): 
+    def write_sdf(self,sdf_data,file_name): 
         """
         
 
@@ -376,9 +374,10 @@ class sdf_from_binary_mask:
         The data can be loaded using the function numpy.loadtxt in a numpy.array
         which can be used to plot the values
         """
+        file_name = file_name.split(".")
         first_line = "SDF data obtained using a grid finess =" + str(self.grid_finess) 
-        np.savetxt("sdf_output.txt",sdf_data, header = first_line)
-        np.savetxt("input.txt",self.segmentation, header = "segmantation")
+        np.savetxt("output_from_" + file_name[0]+".txt",sdf_data, header = first_line)
+        np.savetxt(file_name[0]+".txt" ,self.segmentation, header = "segmantation")
         
         return
     
