@@ -32,7 +32,7 @@ mycmap = LinearSegmentedColormap.from_list(
 )
 
 
-def plotting(final_distance, X, Y, save):
+def plotting(final_distance, X, Y):
     """
     
 
@@ -56,8 +56,5 @@ def plotting(final_distance, X, Y, save):
     fig, ax = plt.subplots(figsize=(np.minimum(np.max(X),20), np.minimum(np.max(Y),20)), dpi=300)
     norm_d = mcolors.TwoSlopeNorm(vmin=final_distance.min(), vcenter=0, vmax=final_distance.max())
     ax.imshow(final_distance.T, norm=norm_d, cmap=mycmap, **props)
-    if save=="y":
-        fig.savefig('sdf_output.png')
-    plt.close('all')
     return
 
