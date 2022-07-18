@@ -88,6 +88,37 @@ def shape_as_points(shape):
         return points
     
 
+def generate_sides(poly, d=0.5):
+        """
+        
+
+        Parameters
+        ----------
+        poly : numpay.ndarray shape (2,:)
+            coordinates of the center each pixel of the binary mask
+        d : float
+            The default is 0.5, wich means that it defines a side length of 
+            one pixel
+        
+        Yields     
+        ------    
+        gives the generator function for the square of unitary length
+        surrounding each pixel
+        
+        Description
+        ------
+            from the centre of each pixel given in the binary mask 
+            it returns a square whose centre is the given pixel  
+        
+        """
+        assert poly.shape[1]==2 #needed for 2D sdf
+        for x, y in poly:
+            yield (x+d, y+d), (x+d, y-d)
+            yield (x+d, y-d), (x-d, y-d)
+            yield (x-d, y-d), (x-d, y+d)
+            yield (x-d, y+d), (x+d, y+d)
+    
+
 class sdf_from_binary_mask: 
     
     def __init__(self,segmentation,grid_finess):
@@ -153,37 +184,6 @@ class sdf_from_binary_mask:
     """
     
     
-    
-    def generate_sides(self,poly, d=0.5):
-        """
-        
-
-        Parameters
-        ----------
-        poly : numpay.ndarray shape (2,:)
-            coordinates of the center each pixel of the binary mask
-        d : float
-            The default is 0.5, wich means that it defines a side length of 
-            one pixel
-        
-        Yields     
-        ------    
-        gives the generator function for the square of unitary length
-        surrounding each pixel
-        
-        Description
-        ------
-            from the centre of each pixel given in the binary mask 
-            it returns a square whose centre is the given pixel  
-        
-        """
-        assert poly.shape[1]==2 #needed for 2D sdf
-        for x, y in poly:
-            yield (x+d, y+d), (x+d, y-d)
-            yield (x+d, y-d), (x-d, y-d)
-            yield (x-d, y-d), (x-d, y+d)
-            yield (x-d, y+d), (x+d, y+d)
-    
     def merge_cubes(self,shape):
         """
         
@@ -207,7 +207,7 @@ class sdf_from_binary_mask:
         """
         
         points = shape_as_points(shape)
-        sides_duplicated = {s for s in self.generate_sides(points)}
+        sides_duplicated = {s for s in generate_sides(points)}
         # the sides that are duplicated are inside the shape and needs to be removed
         sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
         # algorithm to re-thread the sides in a polygon
