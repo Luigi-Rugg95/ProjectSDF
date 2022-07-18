@@ -190,6 +190,8 @@ def diff_point_array(A, B):
 
 class sdf_from_binary_mask: 
     
+    
+    
     def __init__(self,segmentation,grid_finess):
         """
 
@@ -244,23 +246,6 @@ class sdf_from_binary_mask:
         
         
         return X,Y    
-    
-    """
-    --------------------------------------------
-    Transforming a binary blob mask into a shape
-    --------------------------------------------
-    
-    """
-    
-    
-    
-    
-    """
-    -------------------------
-    Calculating the distances
-    -------------------------
-    
-    """
     
     
     
