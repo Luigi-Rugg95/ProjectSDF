@@ -119,6 +119,47 @@ def generate_sides(poly, d=0.5):
             yield (x-d, y+d), (x+d, y+d)
     
 
+def merge_cubes(shape):
+        """
+        
+
+        Parameters
+        ----------
+        shape : numpy.ndarray type bool 
+            shape returned by iterate_shapes() function generator for
+            the input segmentation
+
+        Returns
+        -------
+        final_points : numpay.ndarray
+            final coordinates of the polygon 
+
+        Description
+        -------
+            from the squares created in generate_sides,
+            this function will merge all the cube in a single shape
+        
+        """
+        
+        points = shape_as_points(shape)
+        sides_duplicated = {s for s in generate_sides(points)}
+        # the sides that are duplicated are inside the shape and needs to be removed
+        sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
+        # algorithm to re-thread the sides in a polygon
+        final_points = []
+        pa, pb = next(iter(sides))
+        ended = False
+        while not ended:
+            for p1, p2 in sides:
+                if p1==pb:
+                    final_points.append(p1)
+                    pa, pb = p1, p2
+                    if p2 == final_points[0]:
+                        ended=True
+                    break
+        return final_points
+    
+
 class sdf_from_binary_mask: 
     
     def __init__(self,segmentation,grid_finess):
@@ -184,45 +225,6 @@ class sdf_from_binary_mask:
     """
     
     
-    def merge_cubes(self,shape):
-        """
-        
-
-        Parameters
-        ----------
-        shape : numpy.ndarray type bool 
-            shape returned by iterate_shapes() function generator for
-            the input segmentation
-
-        Returns
-        -------
-        final_points : numpay.ndarray
-            final coordinates of the polygon 
-
-        Description
-        -------
-            from the squares created in generate_sides,
-            this function will merge all the cube in a single shape
-        
-        """
-        
-        points = shape_as_points(shape)
-        sides_duplicated = {s for s in generate_sides(points)}
-        # the sides that are duplicated are inside the shape and needs to be removed
-        sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
-        # algorithm to re-thread the sides in a polygon
-        final_points = []
-        pa, pb = next(iter(sides))
-        ended = False
-        while not ended:
-            for p1, p2 in sides:
-                if p1==pb:
-                    final_points.append(p1)
-                    pa, pb = p1, p2
-                    if p2 == final_points[0]:
-                        ended=True
-                    break
-        return final_points
     
     
     """
@@ -338,7 +340,7 @@ class sdf_from_binary_mask:
         
         
         for shape in iterate_shapes(self.segmentation):
-            polygon = self.merge_cubes(shape)
+            polygon = merge_cubes(shape)
             distance= self.distance_from_poly(polygon, points_to_sample)
             distance = distance.reshape(*XY.shape[:-1])
             if self.distances.size == 0: 
