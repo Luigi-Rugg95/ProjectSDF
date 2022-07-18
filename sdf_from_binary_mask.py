@@ -32,6 +32,34 @@ def load_segmentation():
             segmentations.append((plt.imread('./input/' + file)>0).astype(np.uint32))
     return segmentations,files
 
+
+def iterate_shapes(image):
+        """
+        
+
+        Parameters
+        ----------
+        image : numpy.ndarray 
+            input binary blob mask given in the main (segmentation in the class)
+
+        Yield 
+        -----
+            generator function conditional statement for 
+            labelled figures and number of labels
+            
+        Description
+        -----------    
+            it finds disconnected shapes in a black and white 
+            image and it returns them one by one
+        
+        """
+        
+        labeled_array, num_features = label(image)
+        for idx in range(1, num_features+1):
+            yield labeled_array==idx
+    
+
+
 class sdf_from_binary_mask: 
     
     def __init__(self,segmentation,grid_finess):
@@ -95,33 +123,6 @@ class sdf_from_binary_mask:
     --------------------------------------------
     
     """
-    
-    
-    def iterate_shapes(self,image):
-        """
-        
-
-        Parameters
-        ----------
-        image : numpy.ndarray 
-            input binary blob mask given in the main (segmentation in the class)
-
-        Yield 
-        -----
-            generator function conditional statement for 
-            labelled figures and number of labels
-            
-        Description
-        -----------    
-            it finds disconnected shapes in a black and white 
-            image and it returns them one by one
-        
-        """
-        
-        labeled_array, num_features = label(image)
-        for idx in range(1, num_features+1):
-            yield labeled_array==idx
-    
     
     
     def shape_as_points(self,shape):
@@ -336,7 +337,7 @@ class sdf_from_binary_mask:
         points_to_sample = XY.reshape(-1, 2)
         
         
-        for shape in self.iterate_shapes(self.segmentation):
+        for shape in iterate_shapes(self.segmentation):
             polygon = self.merge_cubes(shape)
             distance= self.distance_from_poly(polygon, points_to_sample)
             distance = distance.reshape(*XY.shape[:-1])
