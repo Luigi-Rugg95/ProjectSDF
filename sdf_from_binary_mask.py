@@ -7,9 +7,19 @@ Created on Sun Mar  6 10:30:50 2022
 
 import numpy as np
 from scipy.ndimage import label
+import os
+import pylab as plt
 
 #import pylab as plt
 
+
+
+def load_segmentation():
+    segmentations = []
+    for root, dirs, files in os.walk('./input/'):
+        for file in files:
+            segmentations.append((plt.imread('./input/' + file)>0).astype(np.uint32))
+    return segmentations,files
 
 class sdf_from_binary_mask: 
     
