@@ -15,6 +15,17 @@ import pylab as plt
 
 
 def load_segmentation():
+    """
+    
+
+    Returns
+    -------
+    segmentations : list of numpy.ndarray
+        All inputs are loaded and appended to the lsit
+    files : list of string
+        file names useful to label the output
+
+    """
     segmentations = []
     for root, dirs, files in os.walk('./input/'):
         for file in files:
