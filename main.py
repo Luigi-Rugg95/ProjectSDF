@@ -11,19 +11,6 @@ import numpy as np
 from plotting import plotting
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
 from sdf_from_binary_mask import load_segmentation
-"""
-segmentation = np.array([
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0],
-    [0, 0, 1, 1, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-])
-"""
 
 segmentations, files_name = load_segmentation()
 
