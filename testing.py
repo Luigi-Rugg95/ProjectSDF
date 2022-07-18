@@ -7,6 +7,7 @@ Created on Mon Feb 28 13:43:42 2022
 
 
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
+from sdf_from_binary_mask import *
 from function_utilities import utility_distance_from_poly_1,utility_distance_from_poly_2,utility_generate_sides,utility_iterate_shapes
 
 import numpy as np
