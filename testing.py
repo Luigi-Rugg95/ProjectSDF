@@ -13,23 +13,6 @@ import numpy as np
 import pytest
 
 
-
-def test_sdf_init_grid_finess(): 
-    """
-
-    Testing
-    -------
-    Unit test on finesse of the grid limit values (0,1)
-    for having a good resolution    
-    
-    Using a square of unitary length as input
-    
-    """
-    segmentation = np.array([[1],])
-    
-    grid_finess=2
-    with pytest.raises(Exception):
-        assert sdf_mask(segmentation,grid_finess)
     
     
 
