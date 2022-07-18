@@ -59,6 +59,34 @@ def iterate_shapes(image):
             yield labeled_array==idx
     
 
+def shape_as_points(shape):
+        """
+        
+
+        Parameters
+        ----------
+        shape : numpy.ndarray type bool or int of 0,1
+            shape returned by iterate_shapes() function generator for
+            the input segmentation
+
+        Returns
+        -------
+        points : numpy.ndarray shape (2,:)
+            coordinates of the center of each pixels
+        
+        Description
+        -------
+            given a binary mask blob it returns all the ponts contained
+            within it, it returns basically the center of each pixel
+        """
+        shape = shape.astype(bool)
+        X, Y = np.mgrid[:shape.shape[0], :shape.shape[1]]
+        X = X[shape]
+        Y = Y[shape]
+        points = np.stack([X, Y]).T
+        
+        return points
+    
 
 class sdf_from_binary_mask: 
     
@@ -125,34 +153,6 @@ class sdf_from_binary_mask:
     """
     
     
-    def shape_as_points(self,shape):
-        """
-        
-
-        Parameters
-        ----------
-        shape : numpy.ndarray type bool or int of 0,1
-            shape returned by iterate_shapes() function generator for
-            the input segmentation
-
-        Returns
-        -------
-        points : numpy.ndarray shape (2,:)
-            coordinates of the center of each pixels
-        
-        Description
-        -------
-            given a binary mask blob it returns all the ponts contained
-            within it, it returns basically the center of each pixel
-        """
-        shape = shape.astype(bool)
-        X, Y = np.mgrid[:shape.shape[0], :shape.shape[1]]
-        X = X[shape]
-        Y = Y[shape]
-        points = np.stack([X, Y]).T
-        
-        return points
-    
     
     def generate_sides(self,poly, d=0.5):
         """
@@ -206,7 +206,7 @@ class sdf_from_binary_mask:
         
         """
         
-        points = self.shape_as_points(shape)
+        points = shape_as_points(shape)
         sides_duplicated = {s for s in self.generate_sides(points)}
         # the sides that are duplicated are inside the shape and needs to be removed
         sides = {(p1, p2) for p1, p2 in sides_duplicated if (p2, p1) not in sides_duplicated}
