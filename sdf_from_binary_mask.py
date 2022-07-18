@@ -159,6 +159,34 @@ def merge_cubes(shape):
                     break
         return final_points
     
+def diff_point_array(A, B):
+        """
+        
+
+        Parameters
+        ----------
+        A: numpy.ndarray
+            contiguous array of the grid points
+        B: numpy.ndarray
+            contiguous array of the coordinates of the polygon vertex
+        
+        Returns
+        -------
+        C : numpy.ndarray
+            it returns all the differences as vector between each point
+            of the grid and each vertex
+        
+        """ 
+        #print(A)
+        #print(B)
+        assert A.shape[-1] == B.shape[-1]
+        A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
+        B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
+        C = A_p - B_p 
+        assert C.shape == (*A.shape[:-1], *B.shape[:-1], A.shape[-1])
+        return C
+
+
 
 class sdf_from_binary_mask: 
     
@@ -234,33 +262,6 @@ class sdf_from_binary_mask:
     
     """
     
-    def diff_point_array(self, A, B):
-        """
-        
-
-        Parameters
-        ----------
-        A: numpy.ndarray
-            contiguous array of the grid points
-        B: numpy.ndarray
-            contiguous array of the coordinates of the polygon vertex
-        
-        Returns
-        -------
-        C : numpy.ndarray
-            it returns all the differences as vector between each point
-            of the grid and each vertex
-        
-        """ 
-        #print(A)
-        #print(B)
-        assert A.shape[-1] == B.shape[-1]
-        A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
-        B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
-        C = A_p - B_p 
-        assert C.shape == (*A.shape[:-1], *B.shape[:-1], A.shape[-1])
-        return C
-
     
     
     
@@ -299,7 +300,7 @@ class sdf_from_binary_mask:
         # difference (as vector) between each vertex and the following one
         e = vj - vi
         # difference (as vector) between each point and each vertex
-        w = self.diff_point_array(p, vi)
+        w = diff_point_array(p, vi)
         # calculate the distance from each segment
         ee = np.einsum("ij, ij -> i", e, e) # scalar product keeping the right sizes
         we = np.einsum("kij, ij -> ki", w, e) # scalar product keeping the right sizes
