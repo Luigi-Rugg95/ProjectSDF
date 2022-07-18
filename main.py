@@ -10,10 +10,11 @@ import numpy as np
 #importing functions
 from plotting import plotting
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
-from sdf_from_binary_mask import load_segmentation
+from sdf_from_binary_mask import *
 
 segmentations, files_name = load_segmentation()
 
-for segmentation in segmentations:
+for segmentation,file_name in zip(segmentations,files_name):
     twodsdf = sdf_mask(segmentation,0.1) #parameters: segmentation, grid_finess
-    plotting(twodsdf.sdf(),*twodsdf.grid(), "y") #parameters: sdf, *grid, if "y" it saves the figure
+    twodsdf.write_sdf(twodsdf.sdf(), file_name)
+    plotting(twodsdf.sdf(),*twodsdf.grid()) #parameters: sdf, *grid
