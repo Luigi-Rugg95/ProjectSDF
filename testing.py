@@ -8,7 +8,7 @@ Created on Mon Feb 28 13:43:42 2022
 
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
 from sdf_from_binary_mask import *
-from function_utilities import utility_distance_from_poly_1,utility_distance_from_poly_2,utility_generate_sides,utility_iterate_shapes
+from function_for_testing import utility_distance_from_poly_1,utility_distance_from_poly_2,utility_generate_sides,utility_iterate_shapes
 
 import numpy as np
 import pytest
@@ -185,7 +185,7 @@ def test_shape_as_points_1_output_value(unitary_cube):
     assert shape_as_points(unitary_cube[0])[0][1]==0
     
 
-def test_generate_sides_1(unitary_cube): 
+def test_generate_sides_1_length_output(unitary_cube): 
     """
     Parameters
     ----------
@@ -195,12 +195,24 @@ def test_generate_sides_1(unitary_cube):
     
     Testing
     -------
-    testing length of the output
-    testing value of the output
+    given a unitary cube as input testing length of the output
     
     """
-    test_sdf = sdf_mask(*unitary_cube)
     assert len(utility_generate_sides(unitary_cube[0])) == 4
+    
+def test_generate_sides_1_value_output(unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    given a unitary cube as input testing value of the output
+    
+    """
     assert utility_generate_sides(unitary_cube[0])[0] == ((0.5,0.5),(0.5,-0.5)) 
     assert utility_generate_sides(unitary_cube[0])[1] == ((0.5,-0.5),(-0.5,-0.5)) 
     assert utility_generate_sides(unitary_cube[0])[2] == ((-0.5,-0.5),(-0.5,0.5)) 
