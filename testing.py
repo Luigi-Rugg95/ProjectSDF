@@ -126,7 +126,7 @@ def test_iterate_shapes_1_shape_found(unitary_cube):
     
     Testing
     -------
-    given unitary cube as input, testing the function iterate_shapes 
+    given unitary cube as input, testing that the function iterate_shapes 
     finds a single shape
     
     """
@@ -144,7 +144,7 @@ def test_iterate_shapes_1_single_pixel_found(unitary_cube):
     
     Testing
     -------
-    given unitary cube as input, testing the function iterate_shapes 
+    given unitary cube as input, testing that the function iterate_shapes 
     returns only a pixel with bolean value True
     
     """
@@ -457,7 +457,7 @@ def two_unitary_cube():
     """
     return [np.array([[1],[1]]),0.1]
     
-def test_iterate_shapes_2(two_unitary_cube): 
+def test_iterate_shapes_2_shape_found(two_unitary_cube): 
     """
     Parameters
     ----------
@@ -467,18 +467,18 @@ def test_iterate_shapes_2(two_unitary_cube):
     
     Testing
     -------
-    Output of the function generator
+    given two unitary cubes side by side as input, testing that the function iterate_shapes 
+    finds a single shape
     
     """
     
-    test_sdf = sdf_mask(*two_unitary_cube)
-    #using function utility used
-    
+
     assert len(utility_iterate_shapes(two_unitary_cube[0])) == 1     
     assert utility_iterate_shapes(two_unitary_cube[0])[0].size == 2     
     assert (utility_iterate_shapes(two_unitary_cube[0])[0] == True).all()     
 
-def test_shape_as_points_2(two_unitary_cube): 
+
+def test_iterate_shapes_2_two_pixel_found(two_unitary_cube): 
     """
     Parameters
     ----------
@@ -488,15 +488,52 @@ def test_shape_as_points_2(two_unitary_cube):
     
     Testing
     -------
-    testing length of the output
-    testing value of the output
+    given two unitary cubes side by side as input, testing that the function iterate_shapes 
+    finds two pixels
     
     """
-    test_sdf = sdf_mask(*two_unitary_cube)
-    assert test_sdf.shape_as_points(two_unitary_cube[0]).shape[0] == 2
-    assert test_sdf.shape_as_points(two_unitary_cube[0]).shape[1] == 2
-    #assert test_sdf.shape_as_points(two_unitary_cube[0]) == 0
+    
+    assert utility_iterate_shapes(two_unitary_cube[0])[0].size == 2     
+    assert (utility_iterate_shapes(two_unitary_cube[0])[0] == True).all()     
 
+
+
+def test_shape_as_points_2_length_output(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+    Testing
+    -------
+    given two unitary cubes side by side as input, testing length of the output
+    
+    """
+    
+    assert shape_as_points(two_unitary_cube[0]).shape[0] == 2
+    assert shape_as_points(two_unitary_cube[0]).shape[1] == 2
+
+def test_shape_as_points_2_value_output(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+    Testing
+    -------
+    given two unitary cubes side by side as input, testing value of the output
+    
+    """
+    
+    assert shape_as_points(two_unitary_cube[0])[0][0]==0
+    assert shape_as_points(two_unitary_cube[0])[0][1]==0
+    assert shape_as_points(two_unitary_cube[0])[1][0]==1
+    assert shape_as_points(two_unitary_cube[0])[1][1]==0
+    
 
 def test_generate_sides_2(two_unitary_cube): 
     """
