@@ -573,7 +573,7 @@ def test_generate_sides_2_value_output(two_unitary_cube):
     assert utility_generate_sides(two_unitary_cube[0])[7] == ((0.5,0.5),(1.5,0.5)) 
 
 
-def test_merge_cubes_2(two_unitary_cube): 
+def test_merge_cubes_2_length_output(two_unitary_cube): 
     """
     Parameters
     ----------
@@ -586,16 +586,33 @@ def test_merge_cubes_2(two_unitary_cube):
     -------
     For the two side by side unitary cube as input, merge_cubes() returns only 
     the cordinate of the corner of the rectangle formed by the two, and the two 
-    conjuction points
+    conjuction points, thus six points
     """
-    test_sdf = sdf_mask(*two_unitary_cube)
-    assert len(test_sdf.merge_cubes(two_unitary_cube[0])) == 6
-    assert test_sdf.merge_cubes(two_unitary_cube[0])[0] == (0.5,-0.5)
-    assert test_sdf.merge_cubes(two_unitary_cube[0])[1] == (-0.5,-0.5)
-    assert test_sdf.merge_cubes(two_unitary_cube[0])[2] == (-0.5,0.5)
-    assert test_sdf.merge_cubes(two_unitary_cube[0])[3] == (0.5,0.5)
-    assert test_sdf.merge_cubes(two_unitary_cube[0])[4] == (1.5,0.5)
-    assert test_sdf.merge_cubes(two_unitary_cube[0])[5] == (1.5,-0.5)
+    assert len(merge_cubes(two_unitary_cube[0])) == 6
+
+
+def test_merge_cubes_2_length_output(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+
+    Testing
+    -------
+    given two unitary cubes side by side as input, testing value of the output
+    
+    """
+    
+    assert merge_cubes(two_unitary_cube[0])[0] == (0.5,-0.5)
+    assert merge_cubes(two_unitary_cube[0])[1] == (-0.5,-0.5)
+    assert merge_cubes(two_unitary_cube[0])[2] == (-0.5,0.5)
+    assert merge_cubes(two_unitary_cube[0])[3] == (0.5,0.5)
+    assert merge_cubes(two_unitary_cube[0])[4] == (1.5,0.5)
+    assert merge_cubes(two_unitary_cube[0])[5] == (1.5,-0.5)
+
 
 def test_distance_from_poly_2(two_unitary_cube): 
     """
