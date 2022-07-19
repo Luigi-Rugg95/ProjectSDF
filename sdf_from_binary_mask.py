@@ -24,12 +24,17 @@ def load_segmentation():
         All inputs are loaded and appended to the lsit
     files : list of string
         file names useful to label the output
-
+        
+    Description
+    -----------
+    The function loads a black and white 2D image in a numpy array, the name of the 
+    file is also saved for keeping track of the input 
+    
     """
     segmentations = []
     for root, dirs, files in os.walk('./input/'):
         for file in files:
-            segmentations.append((plt.imread('./input/' + file)>0).astype(np.uint32))
+            segmentations.append((plt.imread('./input/' + file)!=0).astype(np.uint32))
     return segmentations,files
 
 
