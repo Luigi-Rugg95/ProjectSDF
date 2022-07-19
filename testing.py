@@ -702,7 +702,7 @@ def two_cube_separated():
     return [np.array([[1],[0],[1]]),0.1]
 
 
-def test_iterate_shapes_3(two_cube_separated): 
+def test_iterate_shapes_3_shape_found(two_cube_separated): 
     """
     Parameters
     ----------
@@ -717,12 +717,9 @@ def test_iterate_shapes_3(two_cube_separated):
     
     """
     
-    test_sdf = sdf_mask(*two_cube_separated)
-    #using function utility used
-    
     assert len(utility_iterate_shapes(two_cube_separated[0])) == 2 #two figures found, than the other functions will work regularly
 
-def test_distance_from_poly_3(two_cube_separated): 
+def test_distance_from_poly_3_length_output(two_cube_separated): 
     """
 
     Parameters
@@ -740,7 +737,7 @@ def test_distance_from_poly_3(two_cube_separated):
     test_sdf.sdf()
     assert test_sdf.distances.shape[0]==2
 
-def test_sdf_3(two_cube_separated): 
+def test_sdf_3_output_sdf(two_cube_separated): 
     """
 
     Parameters
