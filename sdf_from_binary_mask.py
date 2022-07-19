@@ -89,7 +89,6 @@ def shape_as_points(shape):
         X = X[shape]
         Y = Y[shape]
         points = np.stack([X, Y]).T
-        
         return points
     
 
