@@ -273,16 +273,15 @@ def test_diff_point_array_1(unitary_cube):
     of the point of the grid itself
     """    
     
-    test_sdf = sdf_mask(*unitary_cube)
     grid_points = np.array([-1,-1])
     origin = np.array([0,0])
-    assert(test_sdf.diff_point_array(grid_points,origin) == grid_points).all()
+    assert(diff_point_array(grid_points,origin) == grid_points).all()
     
     grid_points = np.array([-1,1])
-    assert(test_sdf.diff_point_array(grid_points,origin) == grid_points).all()
+    assert(diff_point_array(grid_points,origin) == grid_points).all()
     
     grid_points = np.array([1,1])
-    assert(test_sdf.diff_point_array(grid_points,origin) == grid_points).all()
+    assert(diff_point_array(grid_points,origin) == grid_points).all()
 
 def test_diff_point_array_2(unitary_cube): 
     """
@@ -301,16 +300,15 @@ def test_diff_point_array_2(unitary_cube):
     whatever point in the grid
     """    
     
-    test_sdf = sdf_mask(*unitary_cube)
     grid_points = np.array([-1,-1])
     point = np.array([1,1])
-    assert(test_sdf.diff_point_array(grid_points,point) == [-2,-2]).all()
+    assert(diff_point_array(grid_points,point) == [-2,-2]).all()
     
     grid_points = np.array([3,3])
-    assert(test_sdf.diff_point_array(grid_points,point) == [2,2]).all()
+    assert(diff_point_array(grid_points,point) == [2,2]).all()
     
     grid_points = np.array([0,0])
-    assert(test_sdf.diff_point_array(grid_points,point) == [-1,-1]).all()
+    assert(diff_point_array(grid_points,point) == [-1,-1]).all()
 
     
     
