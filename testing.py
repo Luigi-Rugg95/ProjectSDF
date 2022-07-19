@@ -115,7 +115,7 @@ def unitary_cube():
     
 
 
-def test_iterate_shapes_1(unitary_cube): 
+def test_iterate_shapes_1_shape_found(unitary_cube): 
     """
     Parameters
     ----------
@@ -126,15 +126,31 @@ def test_iterate_shapes_1(unitary_cube):
     
     Testing
     -------
-    Output of the function generator
+    given unitary cube as input, testing the function iterate_shapes 
+    finds a single shape
     
     """
     
-    test_sdf = sdf_mask(*unitary_cube)
-    #using function utility used
-    
     assert len(utility_iterate_shapes(unitary_cube[0])) == 1     
+    
+def test_iterate_shapes_1_single_pixel_found(unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+     
+    
+    Testing
+    -------
+    given unitary cube as input, testing the function iterate_shapes 
+    returns only a pixel with bolean value True
+    
+    """
+    
     assert (utility_iterate_shapes(unitary_cube[0])[0] == True).all()     
+
 
 def test_shape_as_points_1(unitary_cube): 
     """
