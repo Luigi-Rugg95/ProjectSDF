@@ -24,14 +24,14 @@ The shape is plotted.
 
 5. [requirements.txt](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/requirements.txt) : this file contains the requirements to be installed before running the script, it has been obtained using the command [pipreqs](https://pypi.org/project/pipreqs/) . 
 
-6. [function_utilities.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/function_utilities.py) : here are present some functions useful for testing. 
+6. [functions_for_testing.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/functions_for_testing.py) : here are present some functions useful for testing. 
 to run the script: 
 
 pip install -r requirements.txt
 
 run the main, where an input segmentation and grid_finess can be specified
 
-the output and input are written respectively in sdf_output.txt and input.txt
+the output and input are written respectively in output_from_*inputname.txt and *inputname.txt
 and overwritten at each run
 
 the finess of the grid is also saved in order to be able to plot the shape when
@@ -42,8 +42,6 @@ the sdf output can be loaded with the command
 ```Python
 numpy.loadtxt("sdf_output.txt")
 ```
-
-SDF can be saved as 300 dpi .png 
 
 ### **Examples**
 ***
