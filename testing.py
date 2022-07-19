@@ -656,7 +656,7 @@ def test_distance_from_poly_2(two_unitary_cube):
     assert test_sdf.distances[test_sdf.distances==0].size == utility_distance_from_poly_2(0.02)[1]
 
 
-def test_sdf_2(two_unitary_cube): 
+def test_sdf_2_output_sdf(two_unitary_cube): 
     """
 
     Parameters
@@ -680,23 +680,6 @@ def test_sdf_2(two_unitary_cube):
     assert len(test_sdf.sdf()[test_sdf.sdf() ==-0.5]) == 2
     assert len(test_sdf.sdf()[abs(test_sdf.sdf()) ==np.sqrt(2)/2]) == 4
     
-def test_sdf_2_1(two_unitary_cube): 
-    """
-
-    Parameters
-    ----------
-    list
-        segmentation = two_unitary_cube[0] 
-        grid_finess = two_unitary_cube[1]
-    
-    Testing
-    -------
-    In the case of one figure the sdf returned is the same as the
-    self.distances returned by distance_from_poly
-    """
-    
-    test_sdf = sdf_mask(two_unitary_cube[0],1)
-    assert (test_sdf.sdf()-test_sdf.distances == 0).all()
 
 """
 --------
