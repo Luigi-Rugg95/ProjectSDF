@@ -55,21 +55,44 @@ def test_grid_zero_value():
 
 
     
-def test_init_segmentation(): 
+def test_segmentation_dimension_3D(): 
+    """
     
-    #these are all unit test
-    
+
+    Testing
+    -------
+    testing 3D segmentation as input
+    """
     segmentation=np.array([[[0,1,0],],])
     grid_finess= 0.1
     with pytest.raises(Exception):
             assert sdf_mask(segmentation,grid_finess)
     
+def test_segmentation_dimension_1D(): 
+    """
+    
+
+    Testing
+    -------
+    testing 1D segmentation as input
+    """    
+    
     segmentation=np.array([0,1,0])
     grid_finess= 0.1
     with pytest.raises(Exception):
             assert sdf_mask(segmentation,grid_finess)
+
+def test_segmentation_zero_value(): 
+    """
     
+
+    Testing
+    -------
+    testing zero value segmentation as input
+    """    
+
     segmentation=np.array([[0],])
+    grid_finess= 0.1
     with pytest.raises(AssertionError):
             assert sdf_mask(segmentation,grid_finess)
 
