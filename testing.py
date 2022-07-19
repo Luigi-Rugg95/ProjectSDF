@@ -8,7 +8,7 @@ Created on Mon Feb 28 13:43:42 2022
 
 from sdf_from_binary_mask import sdf_from_binary_mask as sdf_mask
 from sdf_from_binary_mask import *
-from function_for_testing import utility_distance_from_poly_1,utility_distance_from_poly_2,utility_generate_sides,utility_iterate_shapes
+from functions_for_testing import utility_distance_from_poly_1,utility_distance_from_poly_2,utility_generate_sides,utility_iterate_shapes
 
 import numpy as np
 import pytest
@@ -219,7 +219,7 @@ def test_generate_sides_1_value_output(unitary_cube):
     assert utility_generate_sides(unitary_cube[0])[3] == ((-0.5,0.5),(0.5,0.5)) 
      
 
-def test_merge_cubes_1(unitary_cube): 
+def test_merge_cubes_1_length_output(unitary_cube): 
     """
     Parameters
     ----------
@@ -230,16 +230,30 @@ def test_merge_cubes_1(unitary_cube):
 
     Testing
     -------
-    For the unitary cube as input, merge_cubes() returns only 
-    the cordinate of the corner of the cube
+    given a unitary cube as input, the length of the output must be equal to the
+    number of corners of the shape, for a unitary cube then four
     """
-    test_sdf = sdf_mask(*unitary_cube)
-    assert len(test_sdf.merge_cubes(unitary_cube[0])) == 4
-    assert test_sdf.merge_cubes(unitary_cube[0])[0] == (0.5,0.5)
-    assert test_sdf.merge_cubes(unitary_cube[0])[1] == (0.5,-0.5)
-    assert test_sdf.merge_cubes(unitary_cube[0])[2] == (-0.5,-0.5)
-    assert test_sdf.merge_cubes(unitary_cube[0])[3] == (-0.5,0.5)
     
+    assert len(merge_cubes(unitary_cube[0])) == 4
+    
+def test_merge_cubes_1_value_output(unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+
+    Testing
+    -------
+    given a unitary cube as input testing value of the output, coordinates of the corners
+    """
+    assert merge_cubes(unitary_cube[0])[0] == (0.5,0.5)
+    assert merge_cubes(unitary_cube[0])[1] == (0.5,-0.5)
+    assert merge_cubes(unitary_cube[0])[2] == (-0.5,-0.5)
+    assert merge_cubes(unitary_cube[0])[3] == (-0.5,0.5)
+
 
 def test_diff_point_array_1(unitary_cube): 
     """
