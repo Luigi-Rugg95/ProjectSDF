@@ -535,7 +535,7 @@ def test_shape_as_points_2_value_output(two_unitary_cube):
     assert shape_as_points(two_unitary_cube[0])[1][1]==0
     
 
-def test_generate_sides_2(two_unitary_cube): 
+def test_generate_sides_2_length_output(two_unitary_cube): 
     """
     Parameters
     ----------
@@ -545,12 +545,24 @@ def test_generate_sides_2(two_unitary_cube):
     
     Testing
     -------
-    testing length of the output
-    testing value of the output
+    given two unitary cubes side by side as input, testing length of the output
     
     """
-    test_sdf = sdf_mask(*two_unitary_cube)
     assert len(utility_generate_sides(two_unitary_cube[0])) == 8
+    
+def test_generate_sides_2_value_output(two_unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = two_unitary_cube[0] 
+        grid_finess = two_unitary_cube[1]
+    
+    Testing
+    -------
+    given two unitary cubes side by side as input, testing value of the output
+    
+    """
     assert utility_generate_sides(two_unitary_cube[0])[0] == ((0.5,0.5),(0.5,-0.5)) 
     assert utility_generate_sides(two_unitary_cube[0])[1] == ((0.5,-0.5),(-0.5,-0.5)) 
     assert utility_generate_sides(two_unitary_cube[0])[2] == ((-0.5,-0.5),(-0.5,0.5)) 
@@ -559,6 +571,7 @@ def test_generate_sides_2(two_unitary_cube):
     assert utility_generate_sides(two_unitary_cube[0])[5] == ((1.5,-0.5),(0.5,-0.5)) 
     assert utility_generate_sides(two_unitary_cube[0])[6] == ((0.5,-0.5),(0.5,0.5)) 
     assert utility_generate_sides(two_unitary_cube[0])[7] == ((0.5,0.5),(1.5,0.5)) 
+
 
 def test_merge_cubes_2(two_unitary_cube): 
     """
