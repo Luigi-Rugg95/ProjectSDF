@@ -17,17 +17,13 @@ import pytest
     
     
 
-def test_grid():
+def test_grid_boundary():
     """
     
 
     Testing
     -------
-    testing the grid creating
-    limits of the grid contains the entire figure
-    grid finess finite value
-    
-    Using a square of unitary length as input
+    testing the grid boundary with respect to the input segmentation
     
     """
     segmentation = np.array([[1],])
@@ -41,10 +37,22 @@ def test_grid():
         
     
     
+    
+def test_grid_zero_value(): 
+    """
+    
+
+    Testing
+    -------
+    The code raise a ZeroDivisionError when a zero value is given as grid_finess
+
+    """
+    segmentation = np.array([[1],])
     grid_finess=0   
     test_sdf = sdf_mask(segmentation,grid_finess)
     with pytest.raises(ZeroDivisionError):
            assert test_sdf.grid()
+
 
     
 def test_init_segmentation(): 
