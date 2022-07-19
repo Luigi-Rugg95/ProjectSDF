@@ -99,7 +99,7 @@ def test_segmentation_zero_value():
 
 
 """
-Unit testing using a unitary square centered in (0,0) as input labelled with 1
+Unit testing using a unitary square centered in (0,0) as input, test are labelled with 1
 """
 
 @pytest.fixture
@@ -152,7 +152,7 @@ def test_iterate_shapes_1_single_pixel_found(unitary_cube):
     assert (utility_iterate_shapes(unitary_cube[0])[0] == True).all()     
 
 
-def test_shape_as_points_1(unitary_cube): 
+def test_shape_as_points_1_output_length(unitary_cube): 
     """
     Parameters
     ----------
@@ -162,15 +162,28 @@ def test_shape_as_points_1(unitary_cube):
     
     Testing
     -------
-    testing length of the output
-    testing value of the output
-    
+    given a unitary cube as input testing length of the output
     """
-    test_sdf = sdf_mask(*unitary_cube)
-    assert test_sdf.shape_as_points(unitary_cube[0]).shape[0] == 1
-    assert test_sdf.shape_as_points(unitary_cube[0]).shape[1] == 2
-    #assert all(test_sdf.shape_as_points(unitary_cube[0])) == 0
-
+    
+    assert shape_as_points(unitary_cube[0]).shape[0] == 1
+    assert shape_as_points(unitary_cube[0]).shape[1] == 2
+    
+def test_shape_as_points_1_output_value(unitary_cube): 
+    """
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    given a unitary cube as input testing value of the output
+    """
+    
+    assert shape_as_points(unitary_cube[0])[0][0]==0
+    assert shape_as_points(unitary_cube[0])[0][1]==0
+    
 
 def test_generate_sides_1(unitary_cube): 
     """
