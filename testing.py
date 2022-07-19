@@ -353,7 +353,8 @@ def test_distance_from_poly_1(unitary_cube):
     assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_1(0.02)[0]
     assert test_sdf.distances[test_sdf.distances==0].size == utility_distance_from_poly_1(0.02)[1]
 
-def test_calculate_distance_1(unitary_cube): 
+
+def test_calculate_distance_1_number_of_shapes(unitary_cube): 
     """
     
 
@@ -365,19 +366,35 @@ def test_calculate_distance_1(unitary_cube):
     
     Testing
     -------
-    Shape of the attribute distances, since we have only one shape,
-    we obtain only one set of distance
-    the shape should be coherent with the dimension of the grid
-
+    given as input a unitary cube, we exept to obtain only one set of sdf
     """
     test_sdf = sdf_mask(*unitary_cube)
     test_sdf.sdf()
     assert test_sdf.distances.shape[0]==1
+    
+
+
+def test_calculate_distance_1_length_output(unitary_cube): 
+    """
+    
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    The number of points in the sdf should be equal to the number of points in the grid
+    """
+    test_sdf = sdf_mask(*unitary_cube)
+    test_sdf.sdf()
     assert test_sdf.distances.shape[1]==test_sdf.grid()[0].shape[0]
     assert test_sdf.distances.shape[2]==test_sdf.grid()[0].shape[1]
     
 
-def test_sdf_1_1(unitary_cube): 
+def test_sdf_1_value_sdf(unitary_cube): 
     """
 
     Parameters
@@ -388,12 +405,12 @@ def test_sdf_1_1(unitary_cube):
     
     Testing
     -------
-    Value of the distance obtained
+    Value of the distance obtained for a unitary cube as input
     With a grid_finess = 1 we get only 9 points in the grid.
     The corners points will have the same minimum distance from the poly,
-    this is just the one fourth of the diagonal of the square defined by the grid
+    this is just one fourth of the diagonal of the square defined by the grid
     The other grid points will have same distance, even though the one at the centre
-    will be defined with a negative sign, sign inside the square
+    will be defined with a negative sign, since inside the square
     """
     
     test_sdf = sdf_mask(unitary_cube[0],1)
@@ -401,11 +418,8 @@ def test_sdf_1_1(unitary_cube):
     assert len(test_sdf.sdf()[test_sdf.sdf() ==-0.5]) == 1
     assert len(test_sdf.sdf()[abs(test_sdf.sdf()) ==np.sqrt(2)/2]) == 4
     
-"""
-Unit testing using two unitary squares side by side, test labelled with 2
-"""
 
-def test_sdf_1_2(unitary_cube): 
+def test_sdf_1_output_comparison_with_calculate_distance(unitary_cube): 
     """
 
     Parameters
@@ -417,11 +431,17 @@ def test_sdf_1_2(unitary_cube):
     Testing
     -------
     In the case of one figure the sdf returned is the same as the
-    self.distance returned by distance_from_poly
+    one obtained by the funcition calculate_distance
     """
     
     test_sdf = sdf_mask(unitary_cube[0],1)
     assert (test_sdf.sdf()-test_sdf.distances == 0).all()
+
+
+"""
+Unit testing using two unitary squares side by side, test labelled with 2
+"""
+
 
 
 
