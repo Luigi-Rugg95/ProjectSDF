@@ -25,13 +25,16 @@ The shape is plotted.
 5. [requirements.txt](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/requirements.txt) : this file contains the requirements to be installed before running the script, it has been obtained using the command [pipreqs](https://pypi.org/project/pipreqs/) . 
 
 6. [functions_for_testing.py](https://github.com/Luigi-Rugg95/ProjectSDF/blob/main/functions_for_testing.py) : here are present some functions useful for testing. 
+
+7. [input](https://github.com/Luigi-Rugg95/ProjectSDF/tree/main/input) : this folder contains all the input in *.png format, the program load them and calculate the sdf for each of them. 
+
 to run the script: 
 
 pip install -r requirements.txt
 
 run the main, where an input segmentation and grid_finess can be specified
 
-the output and input are written respectively in output_from_*inputname.txt and *inputname.txt
+the output and input are written respectively in output_from_*(inputname).txt and *(inputname).txt
 and overwritten at each run
 
 the finess of the grid is also saved in order to be able to plot the shape when
