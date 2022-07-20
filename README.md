@@ -34,8 +34,7 @@ pip install -r requirements.txt
 
 run the main, where an input segmentation and grid_finess can be specified
 
-the output and input are written respectively in output_from_*(inputname).txt and *(inputname).txt
-and overwritten at each run
+the output is written in output_from_*(inputname).txt
 
 the finess of the grid is also saved in order to be able to plot the shape when
 data are loaded
