@@ -319,7 +319,7 @@ def test_diff_point_array_1_value_output(unitary_cube):
     assert (diff_point_array(grid_points,vertices)[3][3] == grid_points[3]-vertices[3]).all
     
     
-def test_distance_from_poly_1(unitary_cube): 
+def test_distance_from_poly_1_points_inside_the_shape(unitary_cube): 
     """
 
     Parameters
@@ -620,47 +620,6 @@ def test_merge_cubes_2_length_output(two_unitary_cube):
     assert merge_cubes(two_unitary_cube[0])[4] == (1.5,0.5)
     assert merge_cubes(two_unitary_cube[0])[5] == (1.5,-0.5)
 
-
-def test_distance_from_poly_2(two_unitary_cube): 
-    """
-
-    Parameters
-    ----------
-    list
-        segmentation = two_unitary_cube[0] 
-        grid_finess = two_unitary_cube[1]
-    
-    Testing
-    -------
-    Number of points inside the cube (calculated distance smaller than 0) or 
-    along the side (calculated distance equal to 0) for different grid_finess
-    
-    """
-    #grid_finess = 1
-    test_sdf = sdf_mask(two_unitary_cube[0],1)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == 2
-    assert test_sdf.distances[test_sdf.distances==0].size == 0
-    
-    
-    #grid_finess = 0.5
-    test_sdf = sdf_mask(two_unitary_cube[0],0.5)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == 3
-    assert test_sdf.distances[test_sdf.distances==0].size == 12
-    
-    #grid_finess = 0.1
-    test_sdf = sdf_mask(two_unitary_cube[0],0.1)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == 171
-    assert test_sdf.distances[test_sdf.distances==0].size == 60
-    
-    #we can compare this with a theoretical value given by the grid_finess using an utility function
-    # which calculates the theoretical number of points inside and along the side of the unitary cube
-    test_sdf = sdf_mask(two_unitary_cube[0],0.02)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_2(0.02)[0]
-    assert test_sdf.distances[test_sdf.distances==0].size == utility_distance_from_poly_2(0.02)[1]
 
 
 def test_sdf_2_output_sdf(two_unitary_cube): 
