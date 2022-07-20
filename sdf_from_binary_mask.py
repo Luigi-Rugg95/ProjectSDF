@@ -181,8 +181,6 @@ def diff_point_array(A, B):
             of the grid and each vertex
         
         """ 
-        #print(A)
-        #print(B)
         assert A.shape[-1] == B.shape[-1]
         A_p = A.reshape(*A.shape[:-1], *np.ones_like(B.shape[:-1]), A.shape[-1])
         B_p = B.reshape(*np.ones_like(A.shape[:-1]), *B.shape)
@@ -301,8 +299,6 @@ class sdf_from_binary_mask:
         limit_grid = [self.segmentation[:,0].size, self.segmentation[0].size]
         #creating a meshgrid
         X, Y = np.mgrid[-1:limit_grid[0]+self.grid_finess:self.grid_finess,-1:limit_grid[1]+self.grid_finess:self.grid_finess]
-        
-        
         return X,Y    
     
     
