@@ -255,7 +255,7 @@ def test_merge_cubes_1_value_output(unitary_cube):
     assert merge_cubes(unitary_cube[0])[3] == (-0.5,0.5)
 
 
-def test_diff_point_array_1(unitary_cube): 
+def test_diff_point_array_1_length_output(unitary_cube): 
     """
     
 
@@ -267,23 +267,19 @@ def test_diff_point_array_1(unitary_cube):
     
     Testing
     -------
-    Array of distances as vector returned after calculating 
-    the difference between one point at the origin and 
-    whatever point in the grid, this should always return the coordinate
-    of the point of the grid itself
+    given a grid finess equal to one (9 total points )and a unitary cube (4 vertices) 
+    as input, the difference between each point of the grid and 
+    each vertex should return an array with 9 points, each of it with 4 2D vector coordinates
     """    
     
-    grid_points = np.array([-1,-1])
-    origin = np.array([0,0])
-    assert(diff_point_array(grid_points,origin) == grid_points).all()
+    grid_points = np.array([[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]])
+    vertices = np.array([[0.5,0.5],[0.5,-0.5],[-0.5,-0.5],[-0.5,0.5]])
+    assert diff_point_array(grid_points,vertices).shape[0] == 9
+    assert diff_point_array(grid_points,vertices).shape[1] == 4
+    assert diff_point_array(grid_points,vertices).shape[2] == 2
     
-    grid_points = np.array([-1,1])
-    assert(diff_point_array(grid_points,origin) == grid_points).all()
     
-    grid_points = np.array([1,1])
-    assert(diff_point_array(grid_points,origin) == grid_points).all()
-
-def test_diff_point_array_2(unitary_cube): 
+def test_diff_point_array_1_value_output(unitary_cube): 
     """
     
 
@@ -295,21 +291,32 @@ def test_diff_point_array_2(unitary_cube):
     
     Testing
     -------
-    Array of distances as vector returned after calculating 
-    the difference between one point at the (1,1) and 
-    whatever point in the grid
+    given a grid finess equal to one a unitary cube, we can compare the 
+    difference between each grid point and each vertex with the output of
+    diff_point_array
     """    
     
-    grid_points = np.array([-1,-1])
-    point = np.array([1,1])
-    assert(diff_point_array(grid_points,point) == [-2,-2]).all()
+    grid_points = np.array([[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]])
+    vertices = np.array([[0.5,0.5],[0.5,-0.5],[-0.5,-0.5],[-0.5,0.5]])
+    assert (diff_point_array(grid_points,vertices)[0][0] == grid_points[0]-vertices[0]).all
+    assert (diff_point_array(grid_points,vertices)[0][1] == grid_points[0]-vertices[1]).all
+    assert (diff_point_array(grid_points,vertices)[0][2] == grid_points[0]-vertices[2]).all
+    assert (diff_point_array(grid_points,vertices)[0][3] == grid_points[0]-vertices[3]).all
     
-    grid_points = np.array([3,3])
-    assert(diff_point_array(grid_points,point) == [2,2]).all()
+    assert (diff_point_array(grid_points,vertices)[1][0] == grid_points[1]-vertices[0]).all
+    assert (diff_point_array(grid_points,vertices)[1][1] == grid_points[1]-vertices[1]).all
+    assert (diff_point_array(grid_points,vertices)[1][2] == grid_points[1]-vertices[2]).all
+    assert (diff_point_array(grid_points,vertices)[1][3] == grid_points[1]-vertices[3]).all
     
-    grid_points = np.array([0,0])
-    assert(diff_point_array(grid_points,point) == [-1,-1]).all()
-
+    assert (diff_point_array(grid_points,vertices)[2][0] == grid_points[2]-vertices[0]).all
+    assert (diff_point_array(grid_points,vertices)[2][1] == grid_points[2]-vertices[1]).all
+    assert (diff_point_array(grid_points,vertices)[2][2] == grid_points[2]-vertices[2]).all
+    assert (diff_point_array(grid_points,vertices)[2][3] == grid_points[2]-vertices[3]).all
+    
+    assert (diff_point_array(grid_points,vertices)[3][0] == grid_points[3]-vertices[0]).all
+    assert (diff_point_array(grid_points,vertices)[3][1] == grid_points[3]-vertices[1]).all
+    assert (diff_point_array(grid_points,vertices)[3][2] == grid_points[3]-vertices[2]).all
+    assert (diff_point_array(grid_points,vertices)[3][3] == grid_points[3]-vertices[3]).all
     
     
 def test_distance_from_poly_1(unitary_cube): 
