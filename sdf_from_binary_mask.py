@@ -191,6 +191,60 @@ def diff_point_array(A, B):
         return C
 
 
+def distance_from_poly(poly,points):
+        """
+
+        Parameters
+        ----------
+        poly : list 
+            polygon obtained from the input binary mask    
+            Each element has length 2, given that 
+            we are working in a 2D environment.
+            
+        points : numpy.ndarray shape (2,:)
+            coordinates of the points of the grid
+
+        Returns
+        -------
+        sdf : numpy.ndarray 
+            shape equal to the total number of points in the grid
+            calculated sdf
+        
+        Description
+        -----------
+        the function is the one which calculates effectively the minimum distance
+        beetween one point of the grid and the side of the shape (poly here), and
+        this is iterated for all the points of the grid. The result will be positive
+        if the point lies outside the shape, and negative if the point lies 
+        inside the shape. 
+
+        """
+        p = np.ascontiguousarray(points)
+        # generate the list of points (the actual list, and the list of the next point in the poly)
+        vi = np.array(poly)
+        vj = np.r_[vi[1:], vi[:1]]
+        # difference (as vector) between each vertex and the following one
+        e = vj - vi
+        # difference (as vector) between each point and each vertex
+        w = diff_point_array(p, vi)
+        # calculate the distance from each segment
+        ee = np.einsum("ij, ij -> i", e, e) # scalar product keeping the right sizes
+        we = np.einsum("kij, ij -> ki", w, e) # scalar product keeping the right sizes
+        b = w - e*np.clip( we/ee , 0, 1)[..., np.newaxis]
+        bb = np.einsum("kij, kij -> ki", b, b) # scalar product keeping the right sizes
+        # the distance is the minimum of the distances from all the points
+        d = np.sqrt(np.min(bb, axis=-1))
+        # check if the point is inside or outside
+        c1 = p[:, np.newaxis, 1]>=vi[np.newaxis, :, 1]
+        c2 = p[:, np.newaxis, 1]<vj[np.newaxis, :, 1]
+        c3 = e[..., 0]*w[..., 1]>e[..., 1]*w[..., 0]
+        c = np.stack([c1, c2, c3])
+        cb = c.all(axis=0) | ((~c).all(axis=0))
+        cs = np.where(cb, -1, 1)
+        s = np.multiply.reduce(cs.T)
+        sdf = s*d
+        return sdf
+    
 
 class sdf_from_binary_mask: 
     
@@ -254,59 +308,6 @@ class sdf_from_binary_mask:
     
     
     
-    def distance_from_poly(self,poly,points):
-        """
-
-        Parameters
-        ----------
-        poly : list 
-            polygon obtained from the input binary mask    
-            Each element has length 2, given that 
-            we are working in a 2D environment.
-            
-        points : numpy.ndarray shape (2,:)
-            coordinates of the points of the grid
-
-        Returns
-        -------
-        sdf : numpy.ndarray 
-            shape equal to the total number of points in the grid
-            calculated sdf
-        
-        Description
-        -----------
-        the function is the one which calculates effectively the minimum distance
-        beetween one point of the grid and the side of the shape (poly here), and
-        this is iterated for all the points of the grid. The result will be positive
-        if the point lies outside the shape, and negative if the point lies 
-        inside the shape. 
-
-        """
-        p = np.ascontiguousarray(points)
-        # generate the list of points (the actual list, and the list of the next point in the poly)
-        vi = np.array(poly)
-        vj = np.r_[vi[1:], vi[:1]]
-        # difference (as vector) between each vertex and the following one
-        e = vj - vi
-        # difference (as vector) between each point and each vertex
-        w = diff_point_array(p, vi)
-        # calculate the distance from each segment
-        ee = np.einsum("ij, ij -> i", e, e) # scalar product keeping the right sizes
-        we = np.einsum("kij, ij -> ki", w, e) # scalar product keeping the right sizes
-        b = w - e*np.clip( we/ee , 0, 1)[..., np.newaxis]
-        bb = np.einsum("kij, kij -> ki", b, b) # scalar product keeping the right sizes
-        # the distance is the minimum of the distances from all the points
-        d = np.sqrt(np.min(bb, axis=-1))
-        # check if the point is inside or outside
-        c1 = p[:, np.newaxis, 1]>=vi[np.newaxis, :, 1]
-        c2 = p[:, np.newaxis, 1]<vj[np.newaxis, :, 1]
-        c3 = e[..., 0]*w[..., 1]>e[..., 1]*w[..., 0]
-        c = np.stack([c1, c2, c3])
-        cb = c.all(axis=0) | ((~c).all(axis=0))
-        cs = np.where(cb, -1, 1)
-        s = np.multiply.reduce(cs.T)
-        sdf = s*d
-        return sdf
     
     
     def calculate_distances(self):         
@@ -331,7 +332,7 @@ class sdf_from_binary_mask:
         
         for shape in iterate_shapes(self.segmentation):
             polygon = merge_cubes(shape)
-            distance= self.distance_from_poly(polygon, points_to_sample)
+            distance= distance_from_poly(polygon, points_to_sample)
             distance = distance.reshape(*XY.shape[:-1])
             if self.distances.size == 0: 
                 self.distances = np.array([distance])
