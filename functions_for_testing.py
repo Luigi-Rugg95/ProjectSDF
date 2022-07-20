@@ -74,12 +74,12 @@ def utility_distance_from_poly_1(grid_finess):
     -----------
     This function calculates (analytical calculation) only for a unitary square cube (*) 
     the number of points of a grid given a specific grid_finess which lays inside the square, 
-    and the number of points which lays along the side of the square
+    and the number of points which lay along the side of the square
     """
-    x = np.linspace(-1,1,int((2/grid_finess+1)))
+    X, Y = np.mgrid[-1:1+grid_finess:grid_finess,-1:1+grid_finess:grid_finess]
+    x = Y[0] 
     points_inside = x[abs(x)<0.5]
-    points_along = x[abs(x)==0.5]
-    return (points_inside.size)**2,points_along.size/2*(points_inside.size+1)*4
+    return (points_inside.size)**2
 
 def utility_distance_from_poly_2(grid_finess):
     """
@@ -100,7 +100,7 @@ def utility_distance_from_poly_2(grid_finess):
     -----------
     This function calculates (analytical calculation) only for a shape made of two unitary square cubes (*) 
     the number of points of a grid given a specific grid_finess which lays inside the square, 
-    and the number of points which lays along the side of the shape
+    and the number of points which lay along the side of the shape
     """
     
     x = np.linspace(-1,2,int((3/grid_finess+1)))

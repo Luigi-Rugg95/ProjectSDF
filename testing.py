@@ -330,35 +330,22 @@ def test_distance_from_poly_1_points_inside_the_shape(unitary_cube):
     
     Testing
     -------
-    Number of points inside the cube (calculated distance smaller than 0) or 
-    along the side (calculated distance equal to 0) for different grid_finess
-    
+    Given as input a unitary cube, considering the cruteria used to define the grid,
+    we can find a general expression for the number of points which lays inside the shape
+    as function of the grid_finess: 
+        with a unitary cube the grid is a square 2x2, with number of points = ((2/grid_finess)+1)^2
+    The cube is centered in the origin and the vertices coordinates are whether 0.5 or -0.5, 
+    From this we can use an algebraic calculation in order to predict the number of points 
+    inside the unitary cube considering the variation of the grid_finess
     """
-    #grid_finess = 1, only one point inside the cube, no points along the side
-    test_sdf = sdf_mask(unitary_cube[0],1)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == 1
-    assert test_sdf.distances[test_sdf.distances==0].size == 0
-    
-    
-    #grid_finess = 0.5 only one point inside the cube, 8 over along the side
-    test_sdf = sdf_mask(unitary_cube[0],0.5)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == 1
-    assert test_sdf.distances[test_sdf.distances==0].size == 8
-    
-    #grid_finess = 0.1 81 points inside the cube, and 40 along the side
-    test_sdf = sdf_mask(unitary_cube[0],0.1)
-    test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == 81
-    assert test_sdf.distances[test_sdf.distances==0].size == 40
-    
-    #we can compare this with a theoretical value given by the grid_finess using an utility function
-    # which calculates the theoretical number of points inside and along the side of the unitary cube
     test_sdf = sdf_mask(unitary_cube[0],0.02)
     test_sdf.sdf()
-    assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_1(0.02)[0]
-    assert test_sdf.distances[test_sdf.distances==0].size == utility_distance_from_poly_1(0.02)[1]
+    assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_1(0.02)
+    
+    test_sdf = sdf_mask(unitary_cube[0],0.03)
+    test_sdf.sdf()
+    assert test_sdf.distances[test_sdf.distances<0].size == utility_distance_from_poly_1(0.03)
+    
 
 
 def test_calculate_distance_1_number_of_shapes(unitary_cube): 
