@@ -380,8 +380,7 @@ class sdf_from_binary_mask:
         """
         file_name = file_name.split(".")
         first_line = "SDF data obtained using a grid finess =" + str(self.grid_finess) 
-        np.savetxt("output_from_" + file_name[0]+".txt",sdf_data, header = first_line)
-        np.savetxt(file_name[0]+".txt" ,self.segmentation, header = "segmantation")
+        np.savetxt("./output/output_from_" + file_name[0] + ".txt",sdf_data, header = first_line)
         
         return
     
