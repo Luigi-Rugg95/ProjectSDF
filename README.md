@@ -36,8 +36,7 @@ run the main, where an input segmentation and grid_finess can be specified
 
 the output is written in output_from_*(inputname).txt
 
-the finess of the grid is also saved in order to be able to plot the shape when
-data are loaded
+the finess of the grid is written on the header of the output file, in order to be able to plot the shape when data are loaded
 
 the sdf output can be loaded with the command 
 
