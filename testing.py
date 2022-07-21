@@ -319,6 +319,26 @@ def test_diff_point_array_1_value_output(unitary_cube):
     assert (diff_point_array(grid_points,vertices)[3][3] == grid_points[3]-vertices[3]).all
     
     
+def test_distance_from_poly_1_length_output(unitary_cube): 
+    """
+
+    Parameters
+    ----------
+    list
+        segmentation = unitary_cube[0] 
+        grid_finess = unitary_cube[1]
+    
+    Testing
+    -------
+    The output obtained from the function distance_from_poly must contains as many points as 
+    the grid. We check this using a unitary cube as input and grid_finess 0.1
+    """
+    test_sdf = sdf_mask(*unitary_cube)
+    test_sdf.sdf()
+    assert test_sdf.distances.size == test_sdf.grid()[0].size
+    
+
+    
 def test_distance_from_poly_1_points_inside_the_shape(unitary_cube): 
     """
 
@@ -330,8 +350,8 @@ def test_distance_from_poly_1_points_inside_the_shape(unitary_cube):
     
     Testing
     -------
-    Given as input a unitary cube, considering the cruteria used to define the grid,
-    we can find a general expression for the number of points which lays inside the shape
+    Given as input a unitary cube, considering the criteria used to define the grid,
+    we can find the number of points which lay inside the shape
     as function of the grid_finess: 
         with a unitary cube the grid is a square 2x2, with number of points = ((2/grid_finess)+1)^2
     The cube is centered in the origin and the vertices coordinates are whether 0.5 or -0.5, 
