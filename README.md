@@ -41,7 +41,7 @@ the finess of the grid is written on the header of the output file, in order to 
 the sdf output can be loaded with the command 
 
 ```Python
-numpy.loadtxt("sdf_output.txt")
+numpy.loadtxt("./output/*(nameoutput).txt")
 ```
 
 ### **Examples**
