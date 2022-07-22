@@ -10,9 +10,6 @@ from scipy.ndimage import label
 import os
 import pylab as plt
 
-#import pylab as plt
-
-
 
 def load_segmentation():
     """
